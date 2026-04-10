@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+
+# Environment — never commit secrets
+.env
+.env.local
+.env.production
+
+# Uploads — user content stays local
+uploads/
+public/uploads/
+public/static/uploads/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Backups — keep locally, not in repo
+backups/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build artifacts
+dist/
+.cache/
+
+# Site verification files (add yours here or gitignore pattern)
+google*.html
+bing*.xml
+yandex_*.html
+*.txt~
+
+# Python
+__pycache__/
+*.py[cod]
