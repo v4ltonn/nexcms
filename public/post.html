@@ -1,0 +1,2116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="postTitle">NexCMS - Cyber Tech Crypto Gaming News</title>
+    <meta name="description" id="postDescription" content="Latest cyber security, technology, cryptocurrency, and gaming news. Stay ahead with NexCMS.">
+    
+    <!-- Open Graph Meta Tags (fallback - will be updated by JS) -->
+    <meta property="og:title" content="NexCMS - Cyber Tech Crypto Gaming News" id="ogTitle">
+    <meta property="og:description" content="Latest cyber security, technology, cryptocurrency, and gaming news. Stay ahead with NexCMS." id="ogDescription">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="NexCMS">
+    <meta property="og:image" content="${process.env.SITE_URL || 'http://localhost:3000'}/favicon.svg?v=5a8f3b2c" id="ogImage">
+    <meta property="og:image:secure_url" content="${process.env.SITE_URL || 'http://localhost:3000'}/favicon.svg?v=5a8f3b2c">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="NexCMS">
+    
+    <!-- Twitter Card Meta Tags (fallback - will be updated by JS) -->
+    <meta name="twitter:card" content="summary_large_image" id="twitterCard">
+    <meta name="twitter:title" content="NexCMS - Cyber Tech Crypto Gaming News" id="twitterTitle">
+    <meta name="twitter:description" content="Latest cyber security, technology, cryptocurrency, and gaming news. Stay ahead with NexCMS." id="twitterDescription">
+    <meta name="twitter:image" content="${process.env.SITE_URL || 'http://localhost:3000'}/favicon.svg?v=5a8f3b2c" id="twitterImage">
+    <meta name="twitter:image:alt" content="NexCMS">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5a8f3b2c">
+    <link rel="apple-touch-icon" href="/favicon.svg?v=5a8f3b2c">
+    <meta name="theme-color" content="#0a0a0a">
+    
+    <!-- Google AdSense Account -->
+    <meta name="google-adsense-account" content="ca-pub-8567280417220019">
+
+    <!-- Preload critical resources with mobile optimization -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+    <!-- Mobile font optimization -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Extract post slug and fetch post data BEFORE analytics -->
+    <script>
+      // Extract slug from URL immediately
+      const slug = window.location.pathname.split('/posts/')[1];
+      
+      // If we have a slug, fetch post data BEFORE analytics loads
+      if (slug) {
+        (async function() {
+          try {
+            const response = await fetch(`/api/posts/slug/${slug}/full`);
+            if (response.ok) {
+              const data = await response.json();
+              const post = data.post;
+              
+              // Clean title function
+              function cleanTitle(title) {
+                if (!title) return '';
+                let clean = title;
+                const jsonMatch = clean.match(/\{[\s\S]*?"Title"\s*:\s*"([^"]+)"[\s\S]*?\}/);
+                if (jsonMatch && jsonMatch[1]) {
+                  clean = jsonMatch[1].trim();
+                } else {
+                  try {
+                    const jsonData = JSON.parse(clean);
+                    if (jsonData.Title) clean = jsonData.Title.trim();
+                  } catch (e) {
+                    clean = clean.replace(/^\{.*?"Title"\s*:\s*"/, '').replace(/"\s*\}.*$/, '');
+                  }
+                }
+                return clean.replace(/\\n/g, ' ').replace(/\s+/g, ' ').trim();
+              }
+              
+              // Update page title and meta IMMEDIATELY
+              const cleanTitleText = cleanTitle(post.title);
+              document.title = `${cleanTitleText} - NexCMS`;
+              const descriptionMeta = document.getElementById('postDescription');
+              if (descriptionMeta) {
+                const raw = post.excerpt || (post.content || '').replace(/<[^>]*>/g, ' ').substring(0, 200);
+                descriptionMeta.content = raw.length > 160 ? raw.substring(0, 157) + '...' : raw;
+              }
+              
+              // Store post data for later use
+              window.currentPost = post;
+            }
+          } catch (error) {
+            console.error('Failed to preload post:', error);
+          }
+        })();
+      }
+    </script>
+    
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-PXHKD8WC');</script>
+    <!-- End Google Tag Manager -->
+    
+    <!-- Google tag (gtag.js) - Loaded after title is updated -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-X741SFHN2S"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      // Don't send page_view automatically - we'll send it in displayPost() with correct title
+      // This prevents double-tracking with generic title
+      gtag('config', 'G-X741SFHN2S', {
+        send_page_view: false
+      });
+    </script>
+    
+    <!-- Theme (dark/light) - must run before styles apply -->
+    <script src="/js/theme.js"></script>
+    <!-- Admin Bar (WordPress-style) -->
+    <script src="/js/admin-bar.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --bg: #000000;
+            --bg-soft: #0a0a0a;
+            --text: #ffffff;
+            --text-muted: #cccccc;
+            --text-body: #e6e6e6;
+            --border: #333;
+            --header-bg: #111111;
+            --accent: #00ff88;
+            --accent-dim: rgba(0, 255, 136, 0.1);
+            --card: #1a1a1a;
+        }
+        @media (prefers-color-scheme: light) {
+            :root {
+                --bg: #f8f8f8;
+                --bg-soft: #ffffff;
+                --text: #1a1a1a;
+                --text-muted: #555;
+                --text-body: #1a1a1a;
+                --border: #e0e0e0;
+                --header-bg: #ffffff;
+                --accent: #00884d;
+                --accent-dim: rgba(0, 136, 77, 0.08);
+                --card: #ffffff;
+            }
+        }
+        html.theme-light {
+            --bg: #f8f8f8;
+            --bg-soft: #ffffff;
+            --text: #1a1a1a;
+            --text-muted: #555;
+            --text-body: #1a1a1a;
+            --border: #e0e0e0;
+            --header-bg: #ffffff;
+            --accent: #00884d;
+            --accent-dim: rgba(0, 136, 77, 0.08);
+            --card: #ffffff;
+            --code-bg: #f0f0f0;
+            --code-text: #1a1a1a;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        /* Cookie Consent Banner */
+        .cookie-consent {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            color: var(--text);
+            padding: 20px 30px;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+            z-index: 10000;
+            display: none;
+            border-top: 2px solid var(--accent);
+        }
+        
+        .cookie-consent.active {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .cookie-content {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .cookie-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+        .cookie-text {
+            font-size: 0.9rem;
+            color: var(--text-body);
+            line-height: 1.5;
+        }
+        .cookie-text a {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+        
+        .cookie-actions {
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        
+        .cookie-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .cookie-btn-accept {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #000;
+        }
+        
+        .cookie-btn-accept:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
+        }
+        
+        .cookie-btn-reject {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        
+        .cookie-btn-reject:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .cookie-btn-settings {
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+        
+        .cookie-btn-settings:hover {
+            background: rgba(0, 255, 136, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .cookie-consent.active {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .cookie-actions {
+                width: 100%;
+                flex-direction: column;
+            }
+            
+            .cookie-btn {
+                width: 100%;
+            }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .post-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: var(--header-bg);
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+        
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 10px;
+            background: var(--accent-dim);
+            border: 1px solid var(--accent);
+            transition: all 0.3s ease;
+        }
+        .logo:hover {
+            background: var(--accent-dim);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 255, 136, 0.25);
+        }
+        .logo i { font-size: 1.6rem; filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.4)); }
+        .theme-toggle {
+            background: var(--accent-dim);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        .theme-toggle:hover {
+            background: var(--accent);
+            color: #000;
+        }
+        .back-btn {
+            background: var(--accent);
+            color: #000;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: #00cc6a;
+        }
+        
+        .post-content-wrapper {
+            padding: 40px 0;
+        }
+        
+        .post-header {
+            margin-bottom: 20px;
+        }
+        
+        .post-category {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .post-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            line-height: 1.25;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+        .post-meta {
+            display: flex;
+            gap: 20px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        .post-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .post-tags-section {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+        }
+        .tags-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .tags-title::before {
+            content: "🏷️";
+            font-size: 0.9rem;
+        }
+        
+        .post-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        
+        .tag {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #000;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+        
+        .tag:hover {
+            background: linear-gradient(135deg, #00cc6a, #00ff88);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 255, 136, 0.3);
+            border-color: #00ff88;
+        }
+        
+        .post-image {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 12px;
+            margin: 40px 0;
+            display: block;
+            aspect-ratio: 16/9;
+        }
+        
+        /* Article body: Stryker-style readability – comfortable for long reading */
+        .post-body {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            max-width: 100%;
+            margin: 0;
+            text-align: left;
+            overflow-x: hidden;
+            word-wrap: break-word;
+            color: var(--text-body);
+            font-weight: 400;
+            letter-spacing: 0.01em;
+        }
+        .post-body p {
+            margin-bottom: 1.5em;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            font-weight: 400 !important;
+        }
+        .post-body ul,
+        .post-body ol {
+            margin: 1.35em 0;
+            padding-left: 1.5em;
+        }
+        .post-body li {
+            margin-bottom: 0.5em;
+            line-height: 1.8;
+        }
+        .post-body blockquote {
+            margin: 1.5em 0;
+            padding: 1em 1.25em;
+            border-left: 4px solid var(--accent);
+            background: var(--accent-dim);
+            border-radius: 0 8px 8px 0;
+            color: var(--text-body);
+            font-style: italic;
+            line-height: 1.75;
+        }
+        .post-body .linux-install-article p,
+        .post-body .how-to-article p {
+            font-weight: 400 !important;
+        }
+        .post-body p:first-child {
+            font-size: 1.1875rem !important;
+            font-weight: 400;
+            color: var(--text-body);
+            line-height: 1.75 !important;
+        }
+        /* Single typography for ALL posts – overrides inline styles from any source (Quill, scripts, etc.) */
+        .post-body h1,
+        .post-body .linux-install-article h1,
+        .post-body .how-to-article h1 { font-size: 2em !important; font-weight: 700 !important; margin: 1em 0 0.5em !important; color: var(--text) !important; line-height: 1.3 !important; }
+        .post-body h2,
+        .post-body .post-body-h2,
+        .post-body .linux-install-article h2,
+        .post-body .how-to-article h2 { font-size: 1.5em !important; font-weight: 700 !important; margin: 1em 0 0.5em !important; color: var(--text) !important; line-height: 1.35 !important; }
+        .post-body h3,
+        .post-body .linux-install-article h3,
+        .post-body .how-to-article h3 { font-size: 1.17em !important; font-weight: 700 !important; margin: 1em 0 0.4em !important; color: var(--text) !important; line-height: 1.35 !important; }
+        .post-body h4,
+        .post-body .linux-install-article h4,
+        .post-body .how-to-article h4 { font-size: 1em !important; font-weight: 700 !important; margin: 0.9em 0 0.35em !important; color: var(--text) !important; line-height: 1.4 !important; }
+        .post-body h5,
+        .post-body .linux-install-article h5,
+        .post-body .how-to-article h5 { font-size: 0.83em !important; font-weight: 700 !important; margin: 0.8em 0 0.3em !important; color: var(--text) !important; line-height: 1.4 !important; }
+        .post-body h6,
+        .post-body .linux-install-article h6,
+        .post-body .how-to-article h6 { font-size: 0.67em !important; font-weight: 700 !important; margin: 0.7em 0 0.25em !important; color: var(--text) !important; line-height: 1.4 !important; }
+        .post-body p,
+        .post-body .linux-install-article p,
+        .post-body .how-to-article p { font-size: 1.125rem !important; line-height: 1.8 !important; color: var(--text-body) !important; font-weight: 400 !important; margin-bottom: 1.5em !important; }
+        .post-body strong,
+        .post-body b,
+        .post-body .linux-install-article strong,
+        .post-body .how-to-article strong { font-weight: 700 !important; color: inherit !important; }
+        .post-body em,
+        .post-body i { font-style: italic !important; color: inherit !important; }
+        /* Make all images in post body responsive */
+        .post-body img {
+            max-width: 100% !important;
+            height: auto !important;
+            display: block;
+            margin: 20px auto;
+            border-radius: 8px;
+            object-fit: contain;
+        }
+        
+        /* Handle inline images in paragraphs */
+        .post-body p img,
+        .post-body figure img,
+        .post-body div img {
+            max-width: 100% !important;
+            width: auto !important;
+            height: auto !important;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Prevent overflow from tables or other elements */
+        .post-body table {
+            max-width: 100%;
+            overflow-x: auto;
+            display: block;
+        }
+        
+        /* DigitalOcean-style code/command blocks: compact, dark, monospace, copy button */
+        .post-body .post-command-block,
+        .post-body .post-code-block,
+        .post-body .command-block-wrapper,
+        .post-body .code-block-wrapper,
+        .post-body pre,
+        .post-body .how-to-article pre,
+        .post-body .linux-install-article pre {
+            background: #1a1a2e !important;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin: 1rem 0;
+            overflow-x: auto;
+            max-width: 100%;
+            font-family: 'SF Mono', 'Monaco', 'Menlo', 'Courier New', monospace !important;
+            font-size: 0.8125rem !important;
+            line-height: 1.5 !important;
+            padding: 12px 14px;
+            color: var(--text-body);
+            white-space: pre;
+            word-wrap: normal;
+        }
+        html.theme-light .post-body .post-command-block,
+        html.theme-light .post-body .post-code-block,
+        html.theme-light .post-body .command-block-wrapper,
+        html.theme-light .post-body .code-block-wrapper,
+        html.theme-light .post-body pre,
+        html.theme-light .post-body .how-to-article pre,
+        html.theme-light .post-body .linux-install-article pre {
+            background: #f0f0f0 !important;
+            border-color: #ddd;
+            color: #1a1a1a !important;
+        }
+        /* Force readable text in light mode (overrides inline styles from editor) */
+        html.theme-light .post-body,
+        html.theme-light .post-body p,
+        html.theme-light .post-body li,
+        html.theme-light .post-body span,
+        html.theme-light .post-body h1,
+        html.theme-light .post-body h2,
+        html.theme-light .post-body h3,
+        html.theme-light .post-body h4,
+        html.theme-light .post-body blockquote,
+        html.theme-light .post-body strong,
+        html.theme-light .post-body b {
+            color: #1a1a1a !important;
+        }
+        .post-body .post-code-block pre {
+            background: #0d0d0d !important;
+        }
+        .post-body .post-command-block .copy-command-btn,
+        .post-body .post-code-block .copy-code-btn,
+        .post-body .command-block-wrapper .copy-command-btn,
+        .post-body .code-block-wrapper .copy-code-btn,
+        .post-body .how-to-article .copy-command-btn,
+        .post-body .how-to-article .copy-code-btn {
+            font-size: 0.6875rem !important;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .post-body pre code,
+        .post-body .post-command-block code,
+        .post-body .post-code-block code,
+        .post-body .command-block-wrapper code,
+        .post-body .code-block-wrapper code,
+        .post-body .how-to-article pre code {
+            font-size: inherit !important;
+            background: transparent !important;
+            padding: 0;
+            color: inherit;
+            white-space: pre !important;
+            display: block !important;
+        }
+        .post-body .code-block-content pre,
+        .post-body .command-block-content pre {
+            white-space: pre !important;
+            display: block !important;
+        }
+        /* Inline code (single phrase in paragraphs) - keep small */
+        .post-body p code,
+        .post-body li code {
+            background: var(--accent-dim);
+            color: var(--accent);
+            padding: 0.15em 0.4em;
+            border-radius: 4px;
+            font-size: 0.875em;
+            font-family: 'SF Mono', 'Monaco', 'Menlo', monospace;
+        }
+        .post-body pre {
+            display: block;
+        }
+        
+        /* Fix for copied/pasted content */
+        .post-body * {
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        
+        /* Social Sharing Buttons */
+        .social-share-section {
+            margin: 40px 0;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0, 204, 106, 0.02));
+            border-radius: 12px;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+        
+        .social-share-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #00ff88;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .social-share-title i {
+            font-size: 1.1rem;
+        }
+        
+        .social-share-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .social-share-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+        
+        .social-share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .social-share-btn i {
+            font-size: 1.1rem;
+        }
+        
+        .share-twitter {
+            background: #1da1f2;
+            color: #ffffff;
+        }
+        
+        .share-twitter:hover {
+            background: #0d8bd9;
+            border-color: #1da1f2;
+        }
+        
+        .share-facebook {
+            background: #1877f2;
+            color: #ffffff;
+        }
+        
+        .share-facebook:hover {
+            background: #166fe5;
+            border-color: #1877f2;
+        }
+        
+        .share-linkedin {
+            background: #0077b5;
+            color: #ffffff;
+        }
+        
+        .share-linkedin:hover {
+            background: #006399;
+            border-color: #0077b5;
+        }
+        
+        .share-reddit {
+            background: #ff4500;
+            color: #ffffff;
+        }
+        
+        .share-reddit:hover {
+            background: #e63e00;
+            border-color: #ff4500;
+        }
+        
+        .share-copy {
+            background: rgba(0, 255, 136, 0.1);
+            color: #00ff88;
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+        
+        .share-copy:hover {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+        }
+        
+        .share-copy.copied {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            border-color: #00ff88;
+        }
+        
+        @media (max-width: 768px) {
+            .social-share-section {
+                margin: 30px 0;
+                padding: 20px 15px;
+                border-radius: 10px;
+            }
+            
+            .social-share-title {
+                font-size: 0.95rem;
+                margin-bottom: 12px;
+                gap: 6px;
+            }
+            
+            .social-share-title i {
+                font-size: 1rem;
+            }
+            
+            .social-share-buttons {
+                gap: 8px;
+                justify-content: space-between;
+            }
+            
+            .social-share-btn {
+                flex: 1 1 calc(50% - 4px);
+                min-width: calc(50% - 4px);
+                max-width: calc(50% - 4px);
+                padding: 12px 10px;
+                font-size: 0.85rem;
+                justify-content: center;
+            }
+            
+            .social-share-btn span {
+                font-size: 0.8rem;
+            }
+            
+            .social-share-btn i {
+                font-size: 1rem;
+            }
+            
+            /* Copy Link button should be full width on mobile */
+            .share-copy {
+                flex: 1 1 100%;
+                min-width: 100%;
+                max-width: 100%;
+                margin-top: 8px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .social-share-section {
+                padding: 15px 12px;
+                margin: 25px 0;
+            }
+            
+            .social-share-title {
+                font-size: 0.9rem;
+                margin-bottom: 10px;
+            }
+            
+            .social-share-buttons {
+                gap: 6px;
+            }
+            
+            .social-share-btn {
+                padding: 10px 8px;
+                font-size: 0.75rem;
+                gap: 6px;
+            }
+            
+            .social-share-btn span {
+                font-size: 0.75rem;
+            }
+            
+            .social-share-btn i {
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Related Content Section */
+        .related-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid #333;
+        }
+        
+        .related-section, .trending-section {
+            background: #111111;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #333;
+        }
+        
+        .related-title, .trending-title {
+            font-size: 1.5rem;
+            color: #00ff88;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #00ff88;
+            padding-bottom: 10px;
+        }
+        
+        .related-posts {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .related-post-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            background: #1a1a1a;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .related-post-item:hover {
+            background: #2a2a2a;
+            border-color: #00ff88;
+            transform: translateY(-2px);
+        }
+        
+        .related-post-item img {
+            width: 120px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+        
+        .related-post-content {
+            flex: 1;
+        }
+        
+        .related-post-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+        
+        .related-post-meta {
+            font-size: 0.9rem;
+            color: #888;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .trending-posts {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .trending-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #1a1a1a;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .trending-item:hover {
+            background: #2a2a2a;
+            border-color: #00ff88;
+            transform: translateX(5px);
+        }
+        
+        .trending-number {
+            background: #00ff88;
+            color: #000;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        
+        .trending-content {
+            flex: 1;
+        }
+        
+        .trending-title-text {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 5px;
+            line-height: 1.3;
+        }
+        
+        .trending-meta {
+            font-size: 0.8rem;
+            color: #888;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 100px 0;
+            color: #00ff88;
+            font-size: 1.2rem;
+        }
+        
+        .error {
+            text-align: center;
+            padding: 100px 0;
+            color: #ff4444;
+            font-size: 1.2rem;
+        }
+        
+        /* Google Translate Custom Styling - Fixed for dark theme */
+        #google_translate_element {
+            font-size: 14px;
+            background: #1a1a1a !important;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        
+        /* Hide Google Translate banner */
+        .goog-te-banner-frame,
+        .goog-te-banner-frame.skiptranslate {
+            display: none !important;
+        }
+        
+        /* Hide Google Translate feedback widget */
+        .goog-te-ftab,
+        .goog-te-ftab-link,
+        .goog-te-ftab-link span,
+        .goog-te-ftab-link img,
+        .goog-gt-tt,
+        .goog-gt-tt *,
+        #google_translate_element + div,
+        body > div[style*="position: fixed"][style*="bottom"],
+        body > div[id*="goog-gt"],
+        div[id*="goog-gt-tt"] {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            height: 0 !important;
+            width: 0 !important;
+            overflow: hidden !important;
+            pointer-events: none !important;
+        }
+        
+        /* Style the select dropdown */
+        #google_translate_element .goog-te-gadget {
+            color: #ffffff !important;
+            font-family: 'Inter', sans-serif !important;
+        }
+        
+        #google_translate_element .goog-te-gadget-simple {
+            background-color: transparent !important;
+            border: 1px solid rgba(255,255,255,0.2) !important;
+            border-radius: 6px !important;
+            padding: 8px 12px !important;
+            font-size: 0.9rem !important;
+            color: #ffffff !important;
+            cursor: pointer;
+        }
+        
+        #google_translate_element .goog-te-gadget-simple:hover {
+            background-color: rgba(0,255,136,0.1) !important;
+            border-color: #00ff88 !important;
+        }
+        
+        #google_translate_element .goog-te-gadget-simple .goog-te-gadget-icon {
+            display: none !important;
+        }
+        
+        #google_translate_element .goog-te-gadget-simple span {
+            color: #ffffff !important;
+        }
+        
+        /* Style the language dropdown menu */
+        .goog-te-menu-frame {
+            background: #1a1a1a !important;
+            border: 1px solid rgba(255,255,255,0.2) !important;
+            border-radius: 8px !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important;
+            max-width: 300px !important;
+        }
+        
+        .goog-te-menu2 {
+            background: #1a1a1a !important;
+            max-width: 100% !important;
+        }
+        
+        .goog-te-menu2-item {
+            color: #ffffff !important;
+            padding: 12px 15px !important;
+            border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+        }
+        
+        .goog-te-menu2-item:hover {
+            background: rgba(0,255,136,0.2) !important;
+            color: #00ff88 !important;
+        }
+        
+        .goog-te-menu2-item-selected {
+            background: rgba(0,255,136,0.3) !important;
+            color: #00ff88 !important;
+        }
+        
+        .goog-te-menu2-item div {
+            color: inherit !important;
+        }
+        
+        /* Fix for white bar rendering bug */
+        .goog-te-menu-value,
+        .goog-te-menu-value span,
+        .skiptranslate {
+            color: #ffffff !important;
+            background: transparent !important;
+        }
+        
+        /* Mobile: Adjust translate widget */
+        @media (max-width: 768px) {
+            #google_translate_element {
+                position: fixed !important;
+                top: 60px !important;
+                right: 10px !important;
+                padding: 5px !important;
+            }
+            
+            #google_translate_element .goog-te-menu-value {
+                font-size: 0.8rem !important;
+                padding: 5px 8px !important;
+            }
+            
+            .post-content {
+                max-width: 100%;
+            }
+            
+            .post-title {
+                font-size: 2rem;
+            }
+            
+            .post-image {
+                margin: 30px 0;
+                height: auto;
+            }
+            
+            .post-body {
+                font-size: 1.0625rem;
+                line-height: 1.8;
+                max-width: 100%;
+                overflow-x: hidden;
+                padding: 0 5px;
+                color: var(--text-body);
+                font-weight: 400;
+            }
+            .post-body p:first-child {
+                font-size: 1.125rem !important;
+                font-weight: 400;
+                color: var(--text-body);
+                line-height: 1.75 !important;
+            }
+            
+            /* Enhanced mobile image constraints - force all images to be responsive */
+            .post-body img {
+                max-width: 100% !important;
+                width: 100% !important;
+                height: auto !important;
+                max-height: none !important;
+                display: block !important;
+                margin: 15px auto !important;
+                padding: 0 !important;
+                border-radius: 6px;
+                object-fit: contain !important;
+            }
+            
+            .post-body p img,
+            .post-body figure img,
+            .post-body div img,
+            .post-body span img {
+                max-width: 100% !important;
+                width: 100% !important;
+                height: auto !important;
+                margin: 15px 0 !important;
+            }
+            
+            /* Prevent any element from overflowing */
+            .post-body * {
+                max-width: 100% !important;
+                overflow-x: auto;
+                box-sizing: border-box !important;
+            }
+            
+            /* Handle tables and code blocks */
+            .post-body table {
+                display: block;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                width: 100%;
+                max-width: 100%;
+            }
+            
+            .post-body pre,
+            .post-body .post-command-block pre,
+            .post-body .post-code-block pre {
+                white-space: pre;
+                word-wrap: normal;
+                overflow-x: auto;
+                max-width: 100%;
+                font-size: 0.8125rem !important;
+            }
+            
+            .post-meta {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 15px;
+                align-items: center;
+            }
+            
+            .post-meta span {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                white-space: nowrap;
+                padding: 5px 0;
+            }
+            
+            .logo {
+                font-size: 1.1rem;
+                gap: 6px;
+                padding: 4px 8px;
+            }
+            
+            .logo i {
+                font-size: 1.2rem;
+            }
+            
+            .back-btn {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+            
+            .related-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .related-section, .trending-section {
+                padding: 20px;
+            }
+            
+            .related-post-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .related-post-item img {
+                width: 100%;
+                height: 150px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1rem;
+                gap: 4px;
+                padding: 3px 6px;
+            }
+            
+            .logo i {
+                font-size: 1rem;
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+        }
+    </style>
+    <!-- Cookie Consent Script (GDPR & Google Consent Mode v2 Compliant) -->
+    <script src="/js/cookie-consent.js" defer></script>
+    
+    <!-- Google News Subscribe with Google (SWG) -->
+    <script async type="application/javascript"
+            src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
+    <script>
+      (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
+        basicSubscriptions.init({
+          type: "NewsArticle",
+          isPartOfType: ["Product"],
+          isPartOfProductId: "CAowoITDDA:openaccess",
+          clientOptions: { theme: "light", lang: "en" },
+        });
+      });
+    </script>
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8567280417220019"
+            crossorigin="anonymous"></script>
+<!-- Umami Analytics - Privacy-focused analytics -->
+    <!-- Umami Analytics - Privacy-focused analytics (respects cookie consent) -->
+    <script>
+        // Load Umami only if cookie consent is granted
+        let umamiLoaded = false;
+        
+        function loadUmami() {
+            // Don't load if already loaded
+            if (umamiLoaded) return;
+            
+            // Check cookie consent
+            if (getCookie('cookieConsent') === 'accepted') {
+                // Check if script already exists
+                if (document.querySelector('script[data-website-id="8961ffff-ba9e-435d-80dd-e793a0ed658c"]')) {
+                    umamiLoaded = true;
+                    return;
+                }
+                
+                const script = document.createElement('script');
+                script.async = true;
+                script.defer = true;
+                script.setAttribute('data-website-id', '8961ffff-ba9e-435d-80dd-e793a0ed658c');
+                script.setAttribute('data-host-url', 'https://analytics.${process.env.SITE_DOMAIN || 'localhost'}');
+                script.src = 'https://analytics.${process.env.SITE_DOMAIN || 'localhost'}/script.js';
+                
+                script.onload = function() {
+                    umamiLoaded = true;
+                    console.log('Umami analytics loaded');
+                };
+                
+                script.onerror = function() {
+                    console.error('Failed to load Umami analytics');
+                };
+                
+                document.head.appendChild(script);
+            }
+        }
+        
+        // Helper function to get cookie
+        function getCookie(name) {
+            const value = '; ' + document.cookie;
+            const parts = value.split('; ' + name + '=');
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+        
+        // Load on page load if consent already given
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                setTimeout(loadUmami, 100);
+            });
+        } else {
+            setTimeout(loadUmami, 100);
+        }
+        
+        // Listen for cookie consent acceptance
+        window.addEventListener('cookieConsentAccepted', function() {
+            setTimeout(loadUmami, 100);
+        });
+        
+        // Also check periodically in case cookie was set before script loaded
+        setTimeout(function() {
+            if (!umamiLoaded && getCookie('cookieConsent') === 'accepted') {
+                loadUmami();
+            }
+        }, 500);
+    </script>
+    </head>
+<body>
+    <!-- Cookie Consent Banner -->
+    <div id="cookieConsent" class="cookie-consent">
+        <div class="cookie-content">
+            <div class="cookie-title">🍪 Cookie Consent</div>
+            <div class="cookie-text">
+                We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. 
+                By clicking "Accept All", you consent to our use of cookies. 
+                <a href="/privacy-policy">Read our privacy policy</a>.
+            </div>
+        </div>
+        <div class="cookie-actions">
+            <button class="cookie-btn cookie-btn-reject" onclick="rejectCookies()">Reject All</button>
+            <button class="cookie-btn cookie-btn-settings" onclick="openCookieSettings()">Settings</button>
+            <button class="cookie-btn cookie-btn-accept" onclick="acceptCookies()">Accept All</button>
+        </div>
+    </div>
+    
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PXHKD8WC"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="/" class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>NexCMS</span>
+                </a>
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle light/dark" title="Toggle light/dark" onclick="setNexCMSTheme(document.documentElement.classList.contains('theme-light') ? 'dark' : 'light')"></button>
+                    <a href="/" class="back-btn">
+                        <i class="fas fa-arrow-left"></i> Back to Home
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="post-content-wrapper">
+        <div class="container">
+            <div class="post-content">
+                <div id="postContainer">
+                    <div class="loading">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Single API call for post, related posts, and trending posts
+        async function loadPost() {
+            const path = window.location.pathname;
+            const slug = path.split('/posts/')[1];
+            
+            if (!slug) {
+                document.getElementById('postContainer').innerHTML = '<div class="error">Post not found</div>';
+                return;
+            }
+            
+            try {
+                console.log('Loading post data (single API call)...');
+                const response = await fetch(`/api/posts/slug/${slug}/full`);
+                const data = await response.json();
+                
+                if (response.ok && data.post) {
+                    // Display main post
+                    displayPost(data.post);
+                    
+                    // Load related and trending posts from same response
+                    if (data.related && data.related.length > 0) {
+                        displayRelatedPosts(data.related);
+                    }
+                    
+                    if (data.trending && data.trending.length > 0) {
+                        displayTrendingPosts(data.trending);
+                    }
+                    
+                    console.log('Post page loaded from single API call:', {
+                        post: !!data.post,
+                        related: data.related?.length || 0,
+                        trending: data.trending?.length || 0
+                    });
+                } else {
+                    document.getElementById('postContainer').innerHTML = '<div class="error">Post not found</div>';
+                }
+            } catch (error) {
+                console.error('Error loading post:', error);
+                document.getElementById('postContainer').innerHTML = '<div class="error">Error loading post</div>';
+            }
+        }
+        
+        // Clean title from JSON format
+        function cleanTitle(title) {
+            if (!title) return '';
+            let clean = title;
+            
+            // Try to extract from JSON format
+            const jsonMatch = clean.match(/\{[\s\S]*?"Title"\s*:\s*"([^"]+)"[\s\S]*?\}/);
+            if (jsonMatch && jsonMatch[1]) {
+                clean = jsonMatch[1].trim();
+            } else {
+                try {
+                    const jsonData = JSON.parse(clean);
+                    if (jsonData.Title) {
+                        clean = jsonData.Title.trim();
+                    }
+                } catch (e) {
+                    // Not JSON, clean manually
+                    clean = clean.replace(/^\{.*?"Title"\s*:\s*"/, '');
+                    clean = clean.replace(/"\s*\}.*$/, '');
+                }
+            }
+            
+            clean = clean.replace(/\\n/g, ' ').replace(/\s+/g, ' ').trim();
+            return clean;
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        /** Normalize body HTML: strip scripts, raw ##, and inline styles on typography so .post-body CSS only (same as admin/Quill). Handles style with quotes inside (e.g. font-family: 'Inter'). */
+        function normalizePostBodyHtml(html) {
+            if (!html || typeof html !== 'string') return '';
+            var styleAttr = /\s*style=(?:"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')/gi;
+            var out = html
+                .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+                .replace(/<\/script>/gi, '&lt;/script&gt;')
+                .replace(/\s##\s/g, ' ')
+                .replace(/\n##\s+/g, ' ');
+            out = out.replace(/<(h[1-6]|p|strong|b|em|i|blockquote|li)([^>]*)>/gi, function(match, tag, rest) {
+                var without = rest.replace(styleAttr, '').replace(/\s+/g, ' ').trim();
+                return '<' + tag + (without ? ' ' + without : '') + '>';
+            });
+            return out;
+        }
+        
+        function displayPost(post) {
+            // Clean title
+            const cleanPostTitle = cleanTitle(post.title);
+            
+            // Update page title and meta
+            document.title = `${cleanPostTitle} - NexCMS`;
+            document.getElementById('postTitle').textContent = cleanPostTitle;
+            const desc = (post.excerpt || (post.content || '').replace(/<[^>]*>/g, ' ').substring(0, 200));
+            document.getElementById('postDescription').content = desc.length > 160 ? desc.substring(0, 157) + '...' : desc;
+            
+            // Update SEO meta tags
+            updateSEOMetaTags(post);
+            
+            // Send Google Analytics page view with correct title
+            if (typeof gtag !== 'undefined') {
+                // Send manual page_view event with actual post data
+                gtag('event', 'page_view', {
+                    page_title: post.title,
+                    page_location: window.location.href,
+                    page_path: window.location.pathname
+                });
+                
+                // Also update the config for future events
+                gtag('config', 'G-X741SFHN2S', {
+                    page_title: post.title,
+                    page_location: window.location.href
+                });
+                
+                // Send custom event for post view with details
+                gtag('event', 'post_view', {
+                    event_category: 'Content',
+                    event_label: post.title,
+                    value: post.views || 0,
+                    post_id: post._id,
+                    category: post.category?.name || 'Uncategorized',
+                    author: post.author?.username || 'Admin',
+                    post_slug: post.slug
+                });
+            }
+            
+            // Set canonical URL
+            const canonicalUrl = `${process.env.SITE_URL || 'http://localhost:3000'}/posts/${post.slug}`;
+            const canonicalEl = document.getElementById('canonicalUrl');
+            if (canonicalEl) {
+                canonicalEl.href = canonicalUrl;
+            }
+            
+            // Add structured data (JSON-LD) for better indexing
+            const descForSchema = (post.excerpt || (post.content || '').replace(/<[^>]*>/g, ' ')).substring(0, 160);
+            const datePublished = post.publishedAt ? new Date(post.publishedAt).toISOString() : new Date().toISOString();
+            const dateModified = post.updatedAt && post.updatedAt > (post.publishedAt || 0) ? new Date(post.updatedAt).toISOString() : datePublished;
+            const categoryName = post.category?.name || 'Technology';
+            const categorySlug = (post.category && post.category.slug) ? post.category.slug : 'tech';
+            
+            const structuredData = {
+                "@context": "https://schema.org",
+                "@type": "BlogPosting",
+                "headline": post.title,
+                "description": descForSchema,
+                "image": getAbsoluteImageUrl(post.thumbnail?.url) || "${process.env.SITE_URL || 'http://localhost:3000'}/favicon.svg?v=5a8f3b2c",
+                "datePublished": datePublished,
+                "dateModified": dateModified,
+                "author": {
+                    "@type": "Person",
+                    "name": post.author?.username || "NexCMS Admin"
+                },
+                "publisher": {
+                    "@type": "Organization",
+                    "name": "NexCMS",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "${process.env.SITE_URL || 'http://localhost:3000'}/favicon.svg?v=5a8f3b2c"
+                    }
+                },
+                "mainEntityOfPage": {
+                    "@type": "WebPage",
+                    "@id": canonicalUrl
+                },
+                "articleSection": categoryName,
+                "keywords": post.tags?.join(", ") || "technology, cybersecurity, news"
+            };
+            
+            const breadcrumbList = {
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    { "@type": "ListItem", "position": 1, "name": "Home", "item": "${process.env.SITE_URL || 'http://localhost:3000'}/" },
+                    { "@type": "ListItem", "position": 2, "name": categoryName, "item": `${process.env.SITE_URL || 'http://localhost:3000'}/category/${categorySlug}` },
+                    { "@type": "ListItem", "position": 3, "name": cleanTitle(post.title), "item": canonicalUrl }
+                ]
+            };
+            
+            // Remove old structured data if exists
+            document.querySelectorAll('script[type="application/ld+json"]').forEach(s => s.remove());
+            
+            [structuredData, breadcrumbList].forEach(data => {
+                const scriptTag = document.createElement('script');
+                scriptTag.type = 'application/ld+json';
+                scriptTag.textContent = JSON.stringify(data);
+                document.head.appendChild(scriptTag);
+            });
+            
+            // Display post content
+            document.getElementById('postContainer').innerHTML = `
+                <div class="post-header">
+                    <span class="post-category" style="background: ${post.category?.color || '#00ff88'}">
+                        ${post.category?.name || 'Uncategorized'}
+                    </span>
+                    <h1 class="post-title">${cleanTitle(post.title)}</h1>
+                    <div class="post-meta">
+                        <span><i class="fas fa-calendar"></i> ${formatDate(post.publishedAt)}</span>
+                        <span><i class="fas fa-eye"></i> ${post.views || 0} views</span>
+                        <span><i class="fas fa-user"></i> ${post.author?.username || 'Admin'}</span>
+                    </div>
+                </div>
+                
+                ${post.thumbnail?.url ? `
+                    <img src="${post.thumbnail.url}" alt="${cleanTitle(post.title)}" class="post-image">
+                ` : `
+                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1200&h=600&fit=crop" alt="${cleanTitle(post.title)}" class="post-image">
+                `}
+                
+                <div class="post-body">
+                    ${normalizePostBodyHtml(post.contentHtml || ('<p>' + escapeHtml(post.content || '') + '</p>'))}
+                </div>
+                
+                <!-- Social Sharing Buttons -->
+                <div class="social-share-section">
+                    <div class="social-share-title">
+                        <i class="fas fa-share-alt"></i>
+                        <span>Share this article</span>
+                    </div>
+                    <div class="social-share-buttons">
+                        <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(post.title)}" 
+                           target="_blank" 
+                           rel="noopener noreferrer" 
+                           class="social-share-btn share-twitter"
+                           onclick="window.open(this.href, 'share-twitter', 'width=550,height=420'); return false;">
+                            <i class="fab fa-twitter"></i>
+                            <span>Twitter</span>
+                        </a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" 
+                           target="_blank" 
+                           rel="noopener noreferrer" 
+                           class="social-share-btn share-facebook"
+                           onclick="window.open(this.href, 'share-facebook', 'width=580,height=296'); return false;">
+                            <i class="fab fa-facebook-f"></i>
+                            <span>Facebook</span>
+                        </a>
+                        <a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}" 
+                           target="_blank" 
+                           rel="noopener noreferrer" 
+                           class="social-share-btn share-linkedin"
+                           onclick="window.open(this.href, 'share-linkedin', 'width=520,height=570'); return false;">
+                            <i class="fab fa-linkedin-in"></i>
+                            <span>LinkedIn</span>
+                        </a>
+                        <a href="https://reddit.com/submit?url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent(post.title)}" 
+                           target="_blank" 
+                           rel="noopener noreferrer" 
+                           class="social-share-btn share-reddit"
+                           onclick="window.open(this.href, 'share-reddit', 'width=700,height=500'); return false;">
+                            <i class="fab fa-reddit-alien"></i>
+                            <span>Reddit</span>
+                        </a>
+                        <button class="social-share-btn share-copy" onclick="copyPostUrl(this)">
+                            <i class="fas fa-link"></i>
+                            <span>Copy Link</span>
+                        </button>
+                    </div>
+                </div>
+                
+                ${(post.tags && post.tags.length) ? `
+                    <div class="post-tags-section">
+                        <h4 class="tags-title">Tags</h4>
+                        <div class="post-tags">
+                            ${(post.tags || []).map(tag => `<span class="tag">${escapeHtml(String(tag))}</span>`).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+                
+                <!-- Related Content Section -->
+                <div class="related-content">
+                    <div class="related-left">
+                        <div class="related-section">
+                            <h3 class="related-title">More from ${post.category?.name || 'this category'}</h3>
+                            <div id="related-posts" class="related-posts">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="related-right">
+                        <div class="trending-section">
+                            <h3 class="trending-title">Trending</h3>
+                            <div id="trending-posts" class="trending-posts">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            enhancePostCodeBlocks();
+            initCopyButtonsInPostBody();
+            // Related and trending posts are now loaded from the single API call in loadPost()
+        }
+        
+        /** Initialize Copy buttons inside .post-body (scripts in contentHtml don't run when injected via innerHTML) */
+        function initCopyButtonsInPostBody() {
+            const body = document.querySelector('.post-body');
+            if (!body) return;
+            body.querySelectorAll('.copy-command-btn, .copy-code-btn').forEach(btn => {
+                if (btn.dataset.copyInitialized) return;
+                btn.dataset.copyInitialized = 'true';
+                let code = btn.getAttribute('data-code');
+                if (code != null) {
+                    code = code.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&#36;/g, '$');
+                    if (btn.classList.contains('copy-command-btn')) {
+                        code = code.replace(/^[\$#>\s]+/, '').trim();
+                    }
+                } else {
+                    const block = btn.closest('.command-block-wrapper, .code-block-wrapper, .post-command-block, .post-code-block');
+                    const pre = block ? block.querySelector('pre code, pre') : null;
+                    code = pre ? (pre.textContent || '').replace(/^[\$#>\s]+/, '').trim() : '';
+                }
+                const copyTextEl = btn.querySelector('.copy-text') || btn;
+                const originalText = copyTextEl.textContent;
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (!code) return;
+                    navigator.clipboard.writeText(code).then(() => {
+                        copyTextEl.textContent = 'Copied!';
+                        this.style.background = this.classList.contains('copy-command-btn') ? 'linear-gradient(135deg, #00ff88 0%, #00cc6a 100%)' : 'linear-gradient(135deg, #9d4edd 0%, #8d3ecd 100%)';
+                        setTimeout(() => {
+                            copyTextEl.textContent = originalText;
+                            this.style.background = this.classList.contains('copy-command-btn') ? 'linear-gradient(135deg, #6a5acd 0%, #5a4abd 100%)' : 'linear-gradient(135deg, #9d4edd 0%, #8d3ecd 100%)';
+                        }, 2000);
+                    });
+                });
+            });
+        }
+        
+        /** Wrap bare pre/code in .post-body with DigitalOcean-style block + Copy button (for old posts) */
+        function enhancePostCodeBlocks() {
+            const body = document.querySelector('.post-body');
+            if (!body) return;
+            body.querySelectorAll('pre').forEach(pre => {
+                if (pre.closest('.post-command-block, .post-code-block, .command-block-wrapper, .code-block-wrapper')) return;
+                const code = pre.querySelector('code') || pre;
+                const text = code.textContent || pre.textContent || '';
+                if (text.length < 2) return;
+                const wrapper = document.createElement('div');
+                wrapper.className = 'post-code-block';
+                wrapper.style.cssText = 'background:#0d0d0d;border:1px solid #333;border-radius:8px;margin:1rem 0;overflow:hidden;';
+                const header = document.createElement('div');
+                header.style.cssText = 'background:#1a1a1a;padding:8px 14px;border-bottom:1px solid #333;display:flex;align-items:center;justify-content:space-between;';
+                header.innerHTML = '<span style="color:#888;font-size:0.6875rem;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Code</span>';
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'copy-code-btn';
+                btn.textContent = 'Copy';
+                btn.style.cssText = 'background:#9d4edd;color:#fff;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:0.6875rem;';
+                btn.addEventListener('click', function() {
+                    navigator.clipboard.writeText(text).then(() => { this.textContent = 'Copied!'; setTimeout(() => { this.textContent = 'Copy'; }, 2000); });
+                });
+                header.appendChild(btn);
+                wrapper.appendChild(header);
+                pre.style.margin = '0';
+                pre.style.padding = '12px 14px';
+                pre.style.fontSize = '0.8125rem';
+                const parent = pre.parentNode;
+                parent.replaceChild(wrapper, pre);
+                wrapper.appendChild(pre);
+            });
+        }
+        
+        // Helper function to ensure image URL is absolute
+        function getAbsoluteImageUrl(url) {
+            if (!url) return '${process.env.SITE_URL || 'http://localhost:3000'}/favicon.svg?v=5a8f3b2c';
+            // If already absolute, return as is
+            if (url.startsWith('http://') || url.startsWith('https://')) {
+                return url;
+            }
+            // If relative, make it absolute
+            if (url.startsWith('/')) {
+                return `${process.env.SITE_URL || 'http://localhost:3000'}${url}`;
+            }
+            // Default fallback
+            return '${process.env.SITE_URL || 'http://localhost:3000'}/favicon.svg?v=5a8f3b2c';
+        }
+
+        // Helper function to determine image MIME type from URL
+        function getImageType(url) {
+            if (!url) return 'image/png';
+            const lowerUrl = url.toLowerCase();
+            if (lowerUrl.includes('.svg') || lowerUrl.endsWith('.svg')) return 'image/svg+xml';
+            if (lowerUrl.includes('.jpg') || lowerUrl.includes('.jpeg') || lowerUrl.endsWith('.jpg') || lowerUrl.endsWith('.jpeg')) return 'image/jpeg';
+            if (lowerUrl.includes('.png') || lowerUrl.endsWith('.png')) return 'image/png';
+            if (lowerUrl.includes('.webp') || lowerUrl.endsWith('.webp')) return 'image/webp';
+            if (lowerUrl.includes('.gif') || lowerUrl.endsWith('.gif')) return 'image/gif';
+            // Default to PNG for unknown types
+            return 'image/png';
+        }
+
+        function updateSEOMetaTags(post) {
+            // Get absolute image URL with fallback
+            const imageUrl = getAbsoluteImageUrl(post.thumbnail?.url);
+            const imageAlt = post.thumbnail?.alt || post.title || 'NexCMS';
+            const imageWidth = post.thumbnail?.width || 1200;
+            const imageHeight = post.thumbnail?.height || 630;
+            const imageType = getImageType(imageUrl);
+            const metaDesc = (post.excerpt || (post.content || '').replace(/<[^>]*>/g, ' ')).substring(0, 160);
+            const pubDate = post.publishedAt ? new Date(post.publishedAt).toISOString() : '';
+            const modDate = (post.updatedAt && post.publishedAt && post.updatedAt > post.publishedAt) ? new Date(post.updatedAt).toISOString() : pubDate;
+            
+            // Update Open Graph meta tags
+            updateMetaTag('og:title', post.title);
+            updateMetaTag('og:description', metaDesc);
+            updateMetaTag('og:url', `${process.env.SITE_URL || 'http://localhost:3000'}/posts/${post.slug}`);
+            updateMetaTag('og:type', 'article');
+            if (pubDate) updateMetaTag('og:article:published_time', pubDate);
+            if (modDate) updateMetaTag('og:article:modified_time', modDate);
+            updateMetaTag('og:image', imageUrl);
+            updateMetaTag('og:image:secure_url', imageUrl);
+            updateMetaTag('og:image:type', imageType);
+            updateMetaTag('og:image:width', imageWidth.toString());
+            updateMetaTag('og:image:height', imageHeight.toString());
+            updateMetaTag('og:image:alt', imageAlt);
+            updateMetaTag('og:locale', 'en_US');
+            
+            // Update Twitter Card meta tags
+            updateMetaTag('twitter:title', post.title);
+            updateMetaTag('twitter:description', metaDesc);
+            updateMetaTag('twitter:image', imageUrl);
+            updateMetaTag('twitter:image:alt', imageAlt);
+            
+            // Update canonical URL
+            updateCanonicalURL(`${process.env.SITE_URL || 'http://localhost:3000'}/posts/${post.slug}`);
+            
+            // Update keywords
+            const keywords = post.tags ? post.tags.join(', ') : '';
+            updateMetaTag('keywords', keywords);
+        }
+        
+        function updateMetaTag(property, content) {
+            // Handle both property and name attributes
+            let selector = `meta[property="${property}"]`;
+            let meta = document.querySelector(selector);
+            
+            if (!meta) {
+                selector = `meta[name="${property}"]`;
+                meta = document.querySelector(selector);
+            }
+            
+            if (meta) {
+                meta.setAttribute('content', content);
+            } else {
+                // Create new meta tag if it doesn't exist
+                const newMeta = document.createElement('meta');
+                if (property.startsWith('og:') || property.startsWith('twitter:')) {
+                    newMeta.setAttribute('property', property);
+                } else {
+                    newMeta.setAttribute('name', property);
+                }
+                newMeta.setAttribute('content', content);
+                document.head.appendChild(newMeta);
+            }
+        }
+        
+        function updateCanonicalURL(url) {
+            let canonical = document.querySelector('link[rel="canonical"]');
+            if (canonical) {
+                canonical.setAttribute('href', url);
+            } else {
+                canonical = document.createElement('link');
+                canonical.setAttribute('rel', 'canonical');
+                canonical.setAttribute('href', url);
+                document.head.appendChild(canonical);
+            }
+        }
+        
+        // Display related posts (no API call needed - data from main call)
+        function displayRelatedPosts(posts) {
+            const container = document.getElementById('related-posts');
+            if (!container) return;
+            
+            if (posts.length > 0) {
+                container.innerHTML = posts.map(post => {
+                    const cleanPostTitle = cleanTitle(post.title);
+                    return `
+                        <div class="related-post-item" onclick="navigateToPost('${post.slug}', '${cleanPostTitle}', 'related')">
+                            <img src="${post.thumbnail?.url || 'https://via.placeholder.com/120x80/333/fff?text=No+Image'}" 
+                                 alt="${cleanPostTitle}">
+                            <div class="related-post-content">
+                                <h4 class="related-post-title">${cleanPostTitle}</h4>
+                                <div class="related-post-meta">
+                                    <span><i class="fas fa-calendar"></i> ${formatDate(post.publishedAt)}</span>
+                                    <span><i class="fas fa-eye"></i> ${post.views || 0}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                container.innerHTML = '<div class="error">No related posts found.</div>';
+            }
+        }
+        
+        // REMOVED: loadRelatedPosts - now uses data from single API call
+        
+        // Track post clicks for analytics
+        function trackPostClick(postTitle, postSlug, clickType) {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'post_click', {
+                    event_category: 'Content',
+                    event_label: postTitle,
+                    custom_parameters: {
+                        post_slug: postSlug,
+                        click_type: clickType,
+                        page_location: window.location.href
+                    }
+                });
+            }
+        }
+        
+        // Navigate to post with analytics tracking
+        function navigateToPost(postSlug, postTitle, clickType) {
+            trackPostClick(postTitle, postSlug, clickType);
+            window.location.href = `/posts/${postSlug}`;
+        }
+        
+        // Display trending posts (no API call needed - data from main call)
+        function displayTrendingPosts(posts) {
+            const container = document.getElementById('trending-posts');
+            if (!container) return;
+            
+            if (posts.length > 0) {
+                container.innerHTML = posts.map((post, index) => {
+                    const cleanPostTitle = cleanTitle(post.title);
+                    return `
+                        <div class="trending-item" onclick="navigateToPost('${post.slug}', '${cleanPostTitle}', 'trending')">
+                            <div class="trending-number">${index + 1}</div>
+                            <div class="trending-content">
+                                <h4 class="trending-title-text">${cleanPostTitle}</h4>
+                                <div class="trending-meta">${formatDate(post.publishedAt)} • ${post.views || 0} views</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                container.innerHTML = '<div class="error">No trending posts found.</div>';
+            }
+        }
+        
+        // REMOVED: loadTrendingPosts - now uses data from single API call
+        
+        // Copy post URL to clipboard
+        function copyPostUrl(button) {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                const originalText = button.querySelector('span').textContent;
+                button.querySelector('span').textContent = 'Copied!';
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.querySelector('span').textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy URL:', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = url;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalText = button.querySelector('span').textContent;
+                    button.querySelector('span').textContent = 'Copied!';
+                    button.classList.add('copied');
+                    setTimeout(() => {
+                        button.querySelector('span').textContent = originalText;
+                        button.classList.remove('copied');
+                    }, 2000);
+                } catch (e) {
+                    console.error('Fallback copy failed:', e);
+                }
+                document.body.removeChild(textArea);
+            });
+        }
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            
+            // Calculate days difference based on actual calendar days, not hours
+            const dateStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            const nowStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const diffDays = Math.floor((nowStart - dateStart) / (1000 * 60 * 60 * 24));
+            
+            // Same day
+            if (diffDays === 0) {
+                const hours = Math.floor((now - date) / (1000 * 60 * 60));
+                if (hours < 1) return 'Just now';
+                if (hours === 1) return '1 hour ago';
+                return `${hours} hours ago`;
+            }
+            
+            // Yesterday
+            if (diffDays === 1) return 'Yesterday';
+            
+            // Days ago
+            if (diffDays < 7) return `${diffDays} days ago`;
+            
+            return date.toLocaleDateString();
+        }
+        
+        // Load post when page loads
+        document.addEventListener('DOMContentLoaded', loadPost);
+    </script>
+    
+    <!-- Footer -->
+    <footer class="footer" style="background: #1a1a1a; border-top: 2px solid #333; padding: 40px 0 20px; margin-top: 60px;">
+        <div class="container">
+            <div style="text-align: center;">
+                <div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; flex-wrap: wrap;">
+                    <a href="/" style="color: #cccccc; text-decoration: none; transition: color 0.3s ease;">Home</a>
+                    <a href="/category/tech" style="color: #cccccc; text-decoration: none; transition: color 0.3s ease;">Tech</a>
+                    <a href="/category/cyber" style="color: #cccccc; text-decoration: none; transition: color 0.3s ease;">Cyber</a>
+                    <a href="/category/crypto" style="color: #cccccc; text-decoration: none; transition: color 0.3s ease;">Crypto</a>
+                    <a href="/category/gaming" style="color: #cccccc; text-decoration: none; transition: color 0.3s ease;">Gaming</a>
+                    <a href="/category/tools" style="color: #cccccc; text-decoration: none; transition: color 0.3s ease;">Tools</a>
+                    <a href="/contact" style="color: #cccccc; text-decoration: none; transition: color 0.3s ease;">Contact</a>
+                    <a href="/privacy-policy" style="color: #cccccc; text-decoration: none; transition: color 0.3s ease;">Privacy Policy</a>
+                    <a href="/terms-of-service" style="color: #cccccc; text-decoration: none; transition: color 0.3s ease;">Terms of Service</a>
+                </div>
+                <div style="color: #666; font-size: 0.9rem; padding-top: 20px; border-top: 1px solid #333;">
+                    <p>&copy; 2025 NexCMS. All rights reserved. | Contact: <a href="mailto:nexcms@proton.me" style="color: #00ff88; text-decoration: none;">nexcms@proton.me</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+        
+        function setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Strict`;
+        }
+        
+        window.updateThemeToggle = function() {
+            var btn = document.getElementById('theme-toggle');
+            if (!btn) return;
+            var isLight = document.documentElement.classList.contains('theme-light');
+            btn.innerHTML = isLight ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+            btn.setAttribute('title', isLight ? 'Switch to dark' : 'Switch to light');
+            btn.setAttribute('aria-label', isLight ? 'Switch to dark' : 'Switch to light');
+        };
+        document.addEventListener('DOMContentLoaded', function() { if (typeof updateThemeToggle === 'function') updateThemeToggle(); });
+        function checkCookieConsent() {
+            const consent = getCookie('cookieConsent');
+            if (!consent) {
+                // Show banner if no consent given
+                document.getElementById('cookieConsent').classList.add('active');
+                // Block Google Analytics until consent
+                window.gtag = function() {};
+                window.dataLayer = [];
+            } else if (consent === 'accepted') {
+                // User accepted - Google Analytics already loaded
+            } else if (consent === 'rejected') {
+                // User rejected - ensure Analytics are blocked
+                window.gtag = function() {};
+                window.dataLayer = [];
+            }
+        }
+        
+        function acceptCookies() {
+            setCookie('cookieConsent', 'accepted', 365);
+            document.getElementById('cookieConsent').classList.remove('active');
+            
+            // Reload Google Analytics if not already loaded
+            if (typeof gtag === 'undefined' || window.gtag.toString().includes('function()')) {
+                loadGoogleAnalytics();
+            }
+            
+            // Trigger Umami load event
+            window.dispatchEvent(new Event('cookieConsentAccepted'));
+        }
+        
+        function rejectCookies() {
+            setCookie('cookieConsent', 'rejected', 365);
+            document.getElementById('cookieConsent').classList.remove('active');
+            
+            // Ensure Analytics are blocked
+            window.gtag = function() {};
+            window.dataLayer = [];
+        }
+        
+        function openCookieSettings() {
+            alert('Cookie Settings\n\nThis site uses:\n- Essential cookies (required)\n- Analytics cookies (Google Analytics)\n\nManage your preferences by accepting or rejecting cookies.');
+        }
+        
+        function loadGoogleAnalytics() {
+            // Load Google Tag Manager
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-PXHKD8WC');
+            
+            // Load gtag.js
+            const script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-X741SFHN2S';
+            document.head.appendChild(script);
+            
+            script.onload = function() {
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                window.gtag = gtag;
+                gtag('js', new Date());
+                gtag('config', 'G-X741SFHN2S');
+            };
+        }
+        
+        // Check consent on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkCookieConsent();
+        });
+    </script>
+</body>
+</html>

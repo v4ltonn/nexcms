@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image to PDF Converter – JPG, PNG, WebP, GIF to PDF Online Free | NexCMS</title>
+    <meta name="description" content="Convert images to PDF in seconds. Merge JPG, PNG, WebP, and GIF into one PDF file. Free online image to PDF converter—no signup, no watermark. Download or share your PDF instantly.">
+    <meta name="keywords" content="image to PDF, JPG to PDF, PNG to PDF, convert image to PDF, photo to PDF, pictures to PDF, webp to PDF, gif to PDF, free PDF converter, merge images to PDF, online image converter, NexCMS">
+    <meta name="robots" content="index, follow, max-snippet:-1">
+    <link rel="canonical" href="${process.env.SITE_URL || 'http://localhost:3000'}/image-to-pdf">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5a8f3b2c">
+    <meta property="og:title" content="Image to PDF – Convert JPG, PNG, WebP, GIF to PDF Free | NexCMS">
+    <meta property="og:description" content="Free online image to PDF converter. Merge photos and images into one PDF. No signup, no watermark.">
+    <meta property="og:url" content="${process.env.SITE_URL || 'http://localhost:3000'}/image-to-pdf">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Image to PDF Converter – Free Online | NexCMS">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"WebApplication","name":"Image to PDF Converter","url":"${process.env.SITE_URL || 'http://localhost:3000'}/image-to-pdf","description":"Convert JPEG, PNG, WebP, and GIF images to a single PDF file online. Free, no signup. Merge multiple photos into one PDF.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+    </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I convert images to PDF?","acceptedAnswer":{"@type":"Answer","text":"Upload one or more images (JPG, PNG, WebP, or GIF), then click Convert to PDF. Your combined PDF downloads automatically."}},{"@type":"Question","name":"Is the image to PDF converter free?","acceptedAnswer":{"@type":"Answer","text":"Yes. NexCMS's image to PDF tool is free with no signup, no watermark, and no file limit for personal use (max 20 images per conversion)."}},{"@type":"Question","name":"What image formats can I convert to PDF?","acceptedAnswer":{"@type":"Answer","text":"We support JPEG, PNG, WebP, and GIF. Each image becomes one page in the PDF in the order you upload."}}]}
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #0a0a0a; color: #fff; line-height: 1.6; }
+        .header { background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); padding: 15px 0; border-bottom: 2px solid #333; position: sticky; top: 0; z-index: 1000; }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+        .nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.4rem; font-weight: 800; color: #00ff88; text-decoration: none; display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 10px; background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.2); }
+        .logo:hover { background: rgba(0,255,136,0.2); }
+        .logo i { font-size: 1.6rem; }
+        .hero { text-align: center; padding: 50px 20px 30px; background: linear-gradient(135deg, #1a1a1a, #0a0a0a); border-bottom: 2px solid #333; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; background: linear-gradient(135deg, #00ff88, #00cc6a); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero p { color: #aaa; font-size: 1rem; }
+        .tool-section { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 30px 0; border: 1px solid rgba(255,255,255,0.1); }
+        .drop-zone { border: 2px dashed rgba(0,255,136,0.4); border-radius: 12px; padding: 40px; text-align: center; background: rgba(0,255,136,0.05); cursor: pointer; transition: all 0.2s; }
+        .drop-zone:hover, .drop-zone.dragover { border-color: #00ff88; background: rgba(0,255,136,0.1); }
+        .drop-zone input { display: none; }
+        .drop-zone .icon { font-size: 3rem; color: #00ff88; margin-bottom: 12px; }
+        .file-list { margin-top: 20px; }
+        .file-list li { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: #0a0a0a; border-radius: 8px; margin-bottom: 8px; font-size: 0.9rem; }
+        .file-list li .remove { color: #f44; cursor: pointer; }
+        .btn { padding: 14px 28px; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.2s; }
+        .btn-primary { background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; }
+        .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,255,136,0.4); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-wrap { margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap; }
+        .msg { margin-top: 16px; padding: 12px; border-radius: 8px; font-size: 0.95rem; }
+        .msg.error { background: rgba(255,68,68,0.15); color: #ff8888; }
+        .msg.success { background: rgba(0,255,136,0.15); color: #00ff88; }
+        .footer-links { text-align: center; padding: 24px; border-top: 1px solid #333; color: #666; font-size: 0.9rem; }
+        .footer-links a { color: #00ff88; text-decoration: none; }
+        .content-block { margin-top: 40px; padding: 28px 0; border-top: 1px solid #333; }
+        .content-block h2 { font-size: 1.25rem; color: #00ff88; margin-bottom: 12px; font-weight: 600; }
+        .content-block p, .content-block li { color: #bbb; font-size: 0.95rem; margin-bottom: 10px; line-height: 1.65; }
+        .content-block ul { margin: 0 0 16px 1.2rem; }
+        .content-block a { color: #00ff88; text-decoration: none; }
+        .content-block a:hover { text-decoration: underline; }
+        .related-tools { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+        .related-tools a { display: inline-block; padding: 6px 12px; background: rgba(0,255,136,0.1); border-radius: 8px; font-size: 0.9rem; }
+        .related-tools a:hover { background: rgba(0,255,136,0.2); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="/" class="logo"><i class="fas fa-shield-alt"></i><span>NexCMS</span></a>
+                <a href="/tools" style="color:#aaa;text-decoration:none;font-size:0.9rem;">All tools</a>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Image to PDF</h1>
+                <p>Convert JPG, PNG, WebP, or GIF images to one PDF. Free, no signup—merge photos into a single PDF in seconds.</p>
+            </div>
+        </section>
+        <div class="container">
+            <section class="tool-section">
+                <div class="drop-zone" id="dropZone">
+                    <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/gif" multiple>
+                    <div class="icon"><i class="fas fa-images"></i></div>
+                    <p>Drop images here or click to select</p>
+                    <p style="font-size:0.85rem;color:#888;margin-top:8px;">JPEG, PNG, WebP, GIF — max 20 files, 12 MB each</p>
+                </div>
+                <ul class="file-list" id="fileList"></ul>
+                <div class="btn-wrap">
+                    <button type="button" class="btn btn-primary" id="convertBtn" disabled>Convert to PDF</button>
+                </div>
+                <div id="msg"></div>
+
+                <div class="content-block" id="content-for-seo">
+                    <h2>How to convert images to PDF</h2>
+                    <p>Upload one or more images (photos, screenshots, or graphics) in JPEG, PNG, WebP, or GIF format. Drag and drop or click to select. Reorder by removing and re-adding if needed, then click <strong>Convert to PDF</strong>. Your combined PDF downloads automatically—no email, no account, no watermark.</p>
+
+                    <h2>Supported formats</h2>
+                    <p>This free image to PDF converter accepts:</p>
+                    <ul>
+                        <li><strong>JPG / JPEG</strong> – photos and compressed images</li>
+                        <li><strong>PNG</strong> – screenshots and graphics with transparency (converted to PDF page)</li>
+                        <li><strong>WebP</strong> – modern web images (converted to PNG then PDF)</li>
+                        <li><strong>GIF</strong> – simple animations or graphics (first frame used for PDF)</li>
+                    </ul>
+                    <p>Each image becomes one page in the PDF, in the order you add them. Maximum 20 images per conversion, 12 MB per file.</p>
+
+                    <h2>Why use an image to PDF converter?</h2>
+                    <p>Turning images into a single PDF is useful for documents, reports, receipts, photo albums, or submissions that require PDF. This tool runs in your browser and on our server with no desktop software. Files are processed securely and not stored after conversion.</p>
+
+                    <h2>More free tools</h2>
+                    <p>NexCMS offers other utilities for security and productivity:</p>
+                    <div class="related-tools">
+                        <a href="/tools">All tools</a>
+                        <a href="/qr-generator">QR Code Generator</a>
+                        <a href="/hash-generator">Hash Generator</a>
+                        <a href="/base64-encoder">Base64 Encoder</a>
+                        <a href="/json-formatter">JSON Formatter</a>
+                        <a href="/ssl-checker">SSL Checker</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <footer class="footer-links">
+        <p><a href="/tools">Tools</a> &middot; <a href="/">Home</a> &middot; <a href="/contact">Contact</a></p>
+    </footer>
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        const convertBtn = document.getElementById('convertBtn');
+        const msgEl = document.getElementById('msg');
+        let selectedFiles = [];
+
+        function showMsg(text, isError) {
+            msgEl.innerHTML = '<div class="msg ' + (isError ? 'error' : 'success') + '">' + text + '</div>';
+        }
+        function clearMsg() { msgEl.innerHTML = ''; }
+
+        function renderList() {
+            fileList.innerHTML = selectedFiles.map((f, i) =>
+                '<li><span>' + f.name + '</span><span class="remove" data-i="' + i + '">Remove</span></li>'
+            ).join('');
+            fileList.querySelectorAll('.remove').forEach(el => {
+                el.addEventListener('click', () => {
+                    selectedFiles.splice(+el.dataset.i, 1);
+                    renderList();
+                    updateBtn();
+                });
+            });
+            updateBtn();
+        }
+        function updateBtn() {
+            convertBtn.disabled = selectedFiles.length === 0;
+        }
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const files = Array.from(e.dataTransfer.files).filter(f => /^image\/(jpeg|jpg|png|webp|gif)$/i.test(f.type));
+            selectedFiles = selectedFiles.concat(files).slice(0, 20);
+            renderList();
+        });
+        fileInput.addEventListener('change', () => {
+            const files = Array.from(fileInput.files);
+            selectedFiles = selectedFiles.concat(files).slice(0, 20);
+            renderList();
+            fileInput.value = '';
+        });
+
+        convertBtn.addEventListener('click', async () => {
+            if (selectedFiles.length === 0) return;
+            clearMsg();
+            convertBtn.disabled = true;
+            const fd = new FormData();
+            selectedFiles.forEach(f => fd.append('images', f));
+            try {
+                const res = await fetch('/api/tools/image-to-pdf', { method: 'POST', body: fd });
+                if (!res.ok) {
+                    const data = await res.json().catch(() => ({}));
+                    throw new Error(data.error || 'Conversion failed');
+                }
+                const blob = await res.blob();
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'images.pdf';
+                a.click();
+                URL.revokeObjectURL(a.href);
+                showMsg('PDF downloaded.', false);
+            } catch (e) {
+                showMsg(e.message || 'Something went wrong.', true);
+            }
+            convertBtn.disabled = false;
+        });
+    </script>
+</body>
+</html>

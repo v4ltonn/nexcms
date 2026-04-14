@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Headers Checker - Test Website Security | NexCMS</title>
+    <meta name="description" content="Free security headers checker. Test your website's security headers including HTTPS, CSP, HSTS, X-Frame-Options, and more.">
+    <meta name="keywords" content="security headers, HTTPS checker, CSP checker, HSTS, website security test, NexCMS">
+    <link rel="canonical" href="${process.env.SITE_URL || 'http://localhost:3000'}/security-headers">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5a8f3b2c">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            padding: 15px 0;
+            border-bottom: 2px solid #333;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #00ff88;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 10px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+        .logo i { font-size: 1.6rem; filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.5)); }
+        .hero {
+            text-align: center;
+            padding: 60px 0 40px;
+            background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+        }
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .tool-section {
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 40px;
+            margin: 40px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .url-input {
+            flex: 1;
+            padding: 20px;
+            background: #0a0a0a;
+            border: 2px solid rgba(0, 255, 136, 0.3);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+        .url-input:focus {
+            outline: none;
+            border-color: #00ff88;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+        }
+        .check-btn {
+            padding: 20px 40px;
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .check-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 255, 136, 0.4);
+        }
+        .check-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #00ff88;
+        }
+        .results {
+            margin-top: 30px;
+        }
+        .header-item {
+            background: #0a0a0a;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .header-item.present {
+            border-color: rgba(0, 255, 136, 0.3);
+            background: rgba(0, 255, 136, 0.05);
+        }
+        .header-item.missing {
+            border-color: rgba(255, 0, 0, 0.3);
+            background: rgba(255, 0, 0, 0.05);
+        }
+        .header-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header-item.present .header-name { color: #00ff88; }
+        .header-item.missing .header-name { color: #ff0000; }
+        .header-value {
+            font-family: 'Courier New', monospace;
+            color: #888;
+            font-size: 0.9rem;
+            word-break: break-all;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+        }
+        .score-display {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 900;
+            margin: 30px 0;
+            color: #00ff88;
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .input-group { flex-direction: column; }
+            .tool-section { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="/" class="logo"><i class="fas fa-shield-alt"></i><span>NexCMS</span></a>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container">
+        <section class="hero">
+            <h1><i class="fas fa-shield-alt"></i> Security Headers Checker</h1>
+            <p>Test your website's security headers configuration</p>
+        </section>
+        
+        <section class="tool-section">
+            <div class="input-group">
+                <input type="text" 
+                       id="urlInput" 
+                       class="url-input" 
+                       placeholder="https://example.com"
+                       value="">
+                <button class="check-btn" onclick="checkHeaders()">
+                    <i class="fas fa-search"></i> Check Headers
+                </button>
+            </div>
+            
+            <div id="loadingIndicator" class="loading" style="display: none;">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Checking security headers...</p>
+            </div>
+            
+            <div id="resultsContainer" class="results"></div>
+        </section>
+    </div>
+    
+    <script>
+        async function checkHeaders() {
+            const url = document.getElementById('urlInput').value.trim();
+            if (!url) {
+                alert('Please enter a URL');
+                return;
+            }
+            
+            let checkUrl = url;
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                checkUrl = 'https://' + url;
+            }
+            
+            const loading = document.getElementById('loadingIndicator');
+            const results = document.getElementById('resultsContainer');
+            const checkBtn = document.querySelector('.check-btn');
+            
+            loading.style.display = 'block';
+            results.innerHTML = '';
+            checkBtn.disabled = true;
+            
+            try {
+                const response = await fetch(`/api/security-headers?url=${encodeURIComponent(checkUrl)}`);
+                const data = await response.json();
+                
+                loading.style.display = 'none';
+                checkBtn.disabled = false;
+                
+                if (data.success) {
+                    const headers = data.headers || {};
+                    const score = data.score || 0;
+                    
+                    const securityHeaders = [
+                        { name: 'Strict-Transport-Security', key: 'strictTransportSecurity', desc: 'HSTS - Forces HTTPS connections' },
+                        { name: 'Content-Security-Policy', key: 'contentSecurityPolicy', desc: 'CSP - Prevents XSS attacks' },
+                        { name: 'X-Frame-Options', key: 'xFrameOptions', desc: 'Prevents clickjacking attacks' },
+                        { name: 'X-Content-Type-Options', key: 'xContentTypeOptions', desc: 'Prevents MIME type sniffing' },
+                        { name: 'X-XSS-Protection', key: 'xXssProtection', desc: 'XSS protection (legacy)' },
+                        { name: 'Referrer-Policy', key: 'referrerPolicy', desc: 'Controls referrer information' },
+                        { name: 'Permissions-Policy', key: 'permissionsPolicy', desc: 'Controls browser features' },
+                        { name: 'Public-Key-Pins', key: 'publicKeyPins', desc: 'HPKP - Certificate pinning' }
+                    ];
+                    
+                    results.innerHTML = `
+                        <div class="score-display">Security Score: ${score}/100</div>
+                        ${securityHeaders.map(header => {
+                            const value = headers[header.key];
+                            const present = value && value !== 'not-set';
+                            return `
+                                <div class="header-item ${present ? 'present' : 'missing'}">
+                                    <div class="header-name">
+                                        <i class="fas ${present ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+                                        ${header.name}
+                                    </div>
+                                    <div style="color: #888; font-size: 0.9rem; margin-bottom: 10px;">${header.desc}</div>
+                                    ${value ? `
+                                        <div class="header-value">${value}</div>
+                                    ` : `
+                                        <div class="header-value" style="color: #ff0000;">Not set</div>
+                                    `}
+                                </div>
+                            `;
+                        }).join('')}
+                    `;
+                } else {
+                    results.innerHTML = `<div style="text-align: center; color: #ff0000; padding: 40px;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 20px;"></i>
+                        <p>Error: ${data.message || 'Failed to check headers'}</p>
+                        <p style="color: #888; margin-top: 10px;">Make sure the URL is accessible and uses HTTPS</p>
+                    </div>`;
+                }
+            } catch (error) {
+                loading.style.display = 'none';
+                checkBtn.disabled = false;
+                results.innerHTML = `<div style="text-align: center; color: #ff0000; padding: 40px;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 20px;"></i>
+                    <p>Error: ${error.message}</p>
+                </div>`;
+            }
+        }
+        
+        document.getElementById('urlInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkHeaders();
+            }
+        });
+    </script>
+</body>
+</html>
+

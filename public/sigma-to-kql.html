@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sigma to KQL Converter – Microsoft Defender KQL Rules | NexCMS</title>
+    <meta name="description" content="Free online Sigma to KQL converter. Paste Sigma rules and instantly generate KQL queries for Microsoft Defender and Microsoft 365 Defender hunting.">
+    <meta name="keywords" content="sigma to kql, sigma converter, kql converter, microsoft defender kql, microsoft 365 defender, kusto query language, nexcms tools">
+    <link rel="canonical" href="${process.env.SITE_URL || 'http://localhost:3000'}/sigma-to-kql-converter">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5a8f3b2c">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #050608;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #050608 0%, #101820 100%);
+            padding: 15px 0;
+            border-bottom: 2px solid #133428;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #00ff88;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 10px;
+            background: radial-gradient(circle at 0 0, rgba(0,255,136,0.35), transparent 55%);
+            border: 1px solid rgba(0, 255, 136, 0.25);
+            box-shadow: 0 0 25px rgba(0, 255, 136, 0.25);
+        }
+        .logo i { font-size: 1.6rem; filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.6)); }
+        .hero {
+            text-align: center;
+            padding: 60px 0 40px;
+            background: radial-gradient(circle at top, #122b22 0%, #050608 55%);
+        }
+        .hero h1 {
+            font-size: 2.7rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #00ff88, #22ffc0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            color: #c5f7df;
+            max-width: 650px;
+            margin: 0 auto 12px;
+        }
+        .hero-sub {
+            color: #7bd9a9;
+            font-size: 0.9rem;
+        }
+        .badge-row {
+            margin-top: 18px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .badge {
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(0, 255, 136, 0.4);
+            background: rgba(0, 0, 0, 0.4);
+            color: #a8ffda;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .badge i {
+            color: #00ff88;
+        }
+        .tool-layout {
+            display: grid;
+            grid-template-columns: 2.1fr 1.1fr;
+            gap: 24px;
+            margin: 40px 0;
+        }
+        .tool-section {
+            background: radial-gradient(circle at top left, rgba(0,255,136,0.08), transparent 45%), #0b1116;
+            border-radius: 16px;
+            padding: 32px;
+            border: 1px solid rgba(0, 255, 136, 0.18);
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65);
+        }
+        .side-panel {
+            background: #080d11;
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(0, 255, 136, 0.12);
+        }
+        .side-panel h2 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #00ff88;
+        }
+        .side-panel p {
+            font-size: 0.92rem;
+            color: #c7d5e0;
+        }
+        .rate-limit-warning {
+            background: rgba(255, 170, 0, 0.06);
+            border: 1px solid rgba(255, 170, 0, 0.3);
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 18px;
+            color: #ffd27a;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .rate-limit-warning i {
+            margin-top: 2px;
+        }
+        .form-row {
+            margin-bottom: 18px;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .label {
+            color: #9fb4c6;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .sigma-input {
+            width: 100%;
+            min-height: 230px;
+            padding: 16px;
+            background: #050608;
+            border: 2px solid rgba(0, 255, 136, 0.3);
+            border-radius: 12px;
+            color: #ffffff;
+            font-family: monospace;
+            font-size: 0.92rem;
+            resize: vertical;
+        }
+        .sigma-input:focus {
+            outline: none;
+            border-color: #00ff88;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.28);
+        }
+        .preset-select {
+            padding: 9px 12px;
+            background: #050608;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #e5f5ff;
+            font-size: 0.88rem;
+        }
+        .check-btn {
+            padding: 16px 34px;
+            background: linear-gradient(135deg, #00ff88, #22ffc0);
+            color: #000;
+            border: none;
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 14px 30px rgba(0, 255, 136, 0.35);
+        }
+        .check-btn:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 18px 40px rgba(0, 255, 136, 0.45);
+        }
+        .check-btn:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .loading {
+            text-align: center;
+            padding: 24px 0 6px;
+            color: #00ff88;
+            font-size: 0.95rem;
+        }
+        .results {
+            margin-top: 22px;
+        }
+        .card {
+            background: #050608;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(0, 255, 136, 0.22);
+        }
+        .card.error {
+            border-color: rgba(255, 80, 80, 0.6);
+            background: radial-gradient(circle at 0 0, rgba(255, 80, 80, 0.12), transparent 55%), #050608;
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 14px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+        .status-success {
+            background: rgba(0, 255, 136, 0.14);
+            color: #00ff88;
+            border: 1px solid #00ff88;
+        }
+        .status-error {
+            background: rgba(255, 80, 80, 0.14);
+            color: #ff8080;
+            border: 1px solid rgba(255, 80, 80, 0.9);
+        }
+        .kql-output {
+            margin-top: 14px;
+            background: #020305;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #d0fbe7;
+            border: 1px solid rgba(0, 255, 136, 0.18);
+            overflow-x: auto;
+        }
+        .kql-output code {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            display: block;
+        }
+        .kql-output strong {
+            color: #8af8c6;
+        }
+        .copy-btn {
+            margin-top: 14px;
+            padding: 10px 20px;
+            border-radius: 999px;
+            border: 1px solid rgba(0, 255, 136, 0.55);
+            background: transparent;
+            color: #a8ffda;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .copy-btn:hover {
+            background: rgba(0, 255, 136, 0.1);
+        }
+        .contact-card {
+            margin-top: 26px;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px dashed rgba(0, 255, 136, 0.35);
+            background: rgba(0, 0, 0, 0.5);
+            font-size: 0.88rem;
+            color: #c7d5e0;
+        }
+        .contact-card a {
+            color: #00ff88;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .contact-card a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 960px) {
+            .tool-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .tool-section { padding: 22px; }
+            .side-panel { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="/" class="logo"><i class="fas fa-shield-alt"></i><span>NexCMS</span></a>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container">
+        <section class="hero">
+            <h1><i class="fas fa-code-branch"></i> Sigma to KQL Converter</h1>
+            <p>Convert Sigma detection rules into ready-to-use KQL queries for Microsoft Defender and Microsoft 365 Defender hunting.</p>
+            <p class="hero-sub">Powered by the open Sigma ecosystem and PySigma backends. Paste a single Sigma rule in YAML format to generate KQL.</p>
+            <div class="badge-row">
+                <span class="badge"><i class="fas fa-bolt"></i> Client friendly – server-side conversion with strict limits</span>
+                <span class="badge"><i class="fas fa-lock"></i> Input size capped – no rules are stored</span>
+            </div>
+        </section>
+        
+        <section class="tool-layout">
+            <section class="tool-section">
+                <div class="rate-limit-warning">
+                    <i class="fas fa-info-circle"></i>
+                    <div>Rate limit: 5 conversions per 10 minutes per IP address. Large or complex rules may take a couple of seconds to process.</div>
+                </div>
+                
+                <div class="form-row">
+                    <div style="flex: 1;">
+                        <label for="sigmaInput" class="label">Sigma Rule (YAML)</label>
+                    </div>
+                    <div>
+                        <small style="color:#7bd9a9;">Max ~50 KB per request • one rule at a time</small>
+                    </div>
+                </div>
+                
+                <textarea id="sigmaInput" class="sigma-input" placeholder="Paste a Sigma rule here (YAML)...&#10;&#10;title: Suspicious PowerShell&#10;logsource:&#10;  product: windows&#10;  service: security&#10;detection:&#10;  selection:&#10;    EventID: 4688&#10;    NewProcessName|contains: powershell.exe&#10;  condition: selection"></textarea>
+                
+                <div class="form-row" style="margin-top: 10px;">
+                    <div>
+                        <label for="targetSelect" class="label">Output platform</label>
+                        <select id="targetSelect" class="preset-select">
+                            <option value="kusto" selected>Microsoft Defender / M365 Defender (KQL)</option>
+                            <option value="elastic-lucene">Elastic / Kibana (Lucene query)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px; display:flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
+                    <div style="font-size:0.85rem; color:#7f92a5;">
+                        Output is optimized for your selected platform.
+                    </div>
+                    <button class="check-btn" onclick="convertSigma()">
+                        <i class="fas fa-magic"></i> Convert
+                    </button>
+                </div>
+                
+                <div id="loadingIndicator" class="loading" style="display: none;">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Converting Sigma...</p>
+                </div>
+                
+                <div id="resultsContainer" class="results"></div>
+            </section>
+            
+            <aside class="side-panel">
+                <h2><i class="fas fa-book"></i> How this tool works</h2>
+                <p style="margin-bottom:12px;">
+                    Your Sigma rule is sent securely to the NexCMS back-end, where a dedicated converter process
+                    (based on PySigma backends) generates equivalent queries for Microsoft Defender (KQL) or Elastic (Lucene).
+                </p>
+                <ul style="margin-left:18px; margin-bottom:14px; color:#c7d5e0; font-size:0.9rem;">
+                    <li>Input size and processing time are strictly limited.</li>
+                    <li>No rules are stored or logged beyond basic error metrics.</li>
+                    <li>Designed not to impact the main news platform performance.</li>
+                </ul>
+                <div class="contact-card">
+                    <div style="margin-bottom:6px; font-weight:600; color:#a8ffda;">
+                        Need help with Sigma or KQL content?
+                    </div>
+                    <p>
+                        For custom detections, blue team consulting, or integrations, reach out at
+                        <a href="mailto:nexcms@proton.me">nexcms@proton.me</a>.
+                    </p>
+                </div>
+            </aside>
+        </section>
+    </div>
+    
+    <script>
+        async function convertSigma() {
+            const sigma = document.getElementById('sigmaInput').value.trim();
+            const target = (document.getElementById('targetSelect') || {}).value || 'kusto';
+            if (!sigma) {
+                alert('Please paste a Sigma rule first.');
+                return;
+            }
+            if (sigma.length > 50000) {
+                alert('Sigma rule is too large. Please keep it below ~50 KB.');
+                return;
+            }
+            
+            const loading = document.getElementById('loadingIndicator');
+            const results = document.getElementById('resultsContainer');
+            const btn = document.querySelector('.check-btn');
+            
+            loading.style.display = 'block';
+            results.innerHTML = '';
+            btn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/tools/sigma-to-kql', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sigma, target })
+                });
+                const data = await response.json();
+                
+                loading.style.display = 'none';
+                btn.disabled = false;
+                
+                if (data && data.success && data.kql) {
+                    const label = target === 'elastic-lucene'
+                        ? 'Elastic / Kibana (Lucene)'
+                        : 'Microsoft Defender (KQL)';
+                    const safeKql = escapeHtml(data.kql);
+                    results.innerHTML = `
+                        <div class="card">
+                            <div class="status-badge status-success">
+                                <i class="fas fa-check-circle"></i> ${label} query generated successfully
+                            </div>
+                            <div class="kql-output" id="kqlOutput"><code>${safeKql}</code></div>
+                            <button class="copy-btn" onclick="copyKql()">
+                                <i class="fas fa-copy"></i> Copy KQL to clipboard
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    const message = (data && data.error) ? data.error : 'Conversion failed. Please check your Sigma rule.';
+                    results.innerHTML = `
+                        <div class="card error">
+                            <div class="status-badge status-error">
+                                <i class="fas fa-times-circle"></i> Conversion error
+                            </div>
+                            <div style="margin-top:10px; color:#ffd0d0; font-size:0.9rem;">${escapeHtml(message)}</div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                loading.style.display = 'none';
+                btn.disabled = false;
+                results.innerHTML = `
+                    <div class="card error">
+                        <div class="status-badge status-error">
+                            <i class="fas fa-exclamation-triangle"></i> Network error
+                        </div>
+                        <div style="margin-top:10px; color:#ffd0d0; font-size:0.9rem;">${escapeHtml(error.message || 'Unexpected error')}</div>
+                    </div>
+                `;
+            }
+        }
+        
+        function copyKql() {
+            const node = document.querySelector('#kqlOutput code');
+            if (!node) return;
+            const text = node.innerText || node.textContent || '';
+            navigator.clipboard.writeText(text).then(() => {
+                alert('KQL copied to clipboard');
+            }).catch(() => {
+                alert('Unable to copy KQL automatically. Please copy it manually.');
+            });
+        }
+        
+        function escapeHtml(str) {
+            return String(str).replace(/[&<>"']/g, function(m) {
+                return ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                })[m];
+            });
+        }
+    </script>
+</body>
+</html>
+
+
+

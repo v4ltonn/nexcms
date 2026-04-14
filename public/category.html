@@ -1,0 +1,1875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="categoryPageTitle">Loading Category...</title>
+    <meta name="description" id="categoryPageDescription" content="Explore posts from this category on NexCMS.">
+    <meta name="keywords" content="cybersecurity, technology, crypto, gaming, news, tech, blockchain, AI, NexCMS">
+    <meta name="author" content="NexCMS">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="${process.env.SITE_URL || 'http://localhost:3000'}/">
+    
+    <!-- Language and Translation -->
+    <meta http-equiv="content-language" content="en">
+    
+    <!-- Google Translate - Removed (not working) -->
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5a8f3b2c">
+    <link rel="apple-touch-icon" href="/favicon.svg?v=5a8f3b2c">
+    <meta name="theme-color" content="#0a0a0a">
+    
+    <!-- Google AdSense Account -->
+    <meta name="google-adsense-account" content="ca-pub-8567280417220019">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Admin Bar (WordPress-style) -->
+    <script src="/js/admin-bar.js"></script>
+    
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        
+        /* Cookie Consent Banner */
+        .cookie-consent {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+            color: #ffffff;
+            padding: 20px 30px;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            display: none;
+            border-top: 2px solid #00ff88;
+        }
+        
+        .cookie-consent.active {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .cookie-content {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .cookie-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #00ff88;
+            margin-bottom: 8px;
+        }
+        
+        .cookie-text {
+            font-size: 0.9rem;
+            color: #cccccc;
+            line-height: 1.5;
+        }
+        
+        .cookie-text a {
+            color: #00ff88;
+            text-decoration: underline;
+        }
+        
+        .cookie-actions {
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        
+        .cookie-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .cookie-btn-accept {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #000;
+        }
+        
+        .cookie-btn-accept:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
+        }
+        
+        .cookie-btn-reject {
+            background: transparent;
+            color: #fff;
+            border: 1px solid #666;
+        }
+        
+        .cookie-btn-reject:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .cookie-btn-settings {
+            background: transparent;
+            color: #00ff88;
+            border: 1px solid #00ff88;
+        }
+        
+        .cookie-btn-settings:hover {
+            background: rgba(0, 255, 136, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .cookie-consent.active {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .cookie-actions {
+                width: 100%;
+                flex-direction: column;
+            }
+            
+            .cookie-btn {
+                width: 100%;
+            }
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            padding: 15px 0;
+            border-bottom: 2px solid #333;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #00ff88;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 10px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .logo:hover {
+            background: rgba(0, 255, 136, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 255, 136, 0.3);
+        }
+        
+        .logo i {
+            font-size: 1.6rem;
+            filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.5));
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2px;
+            background: rgba(26, 26, 26, 0.9);
+            padding: 4px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.75rem;
+            padding: 6px 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
+        .nav-links a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-links a[href="/category/tech"] {
+            color: #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+        
+        .nav-links a[href="/category/tech"]:hover {
+            background: rgba(0, 255, 136, 0.2);
+            box-shadow: 0 8px 25px rgba(0, 255, 136, 0.3);
+        }
+        
+        .nav-links a[href="/category/cyber"] {
+            color: #00aaff;
+            background: rgba(0, 170, 255, 0.1);
+            border: 1px solid rgba(0, 170, 255, 0.2);
+        }
+        
+        .nav-links a[href="/category/cyber"]:hover {
+            background: rgba(0, 170, 255, 0.2);
+            box-shadow: 0 8px 25px rgba(0, 170, 255, 0.3);
+        }
+        
+        .nav-links a[href="/category/crypto"] {
+            color: #ff4444;
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid rgba(255, 68, 68, 0.2);
+        }
+        
+        .nav-links a[href="/category/crypto"]:hover {
+            background: rgba(255, 68, 68, 0.2);
+            box-shadow: 0 8px 25px rgba(255, 68, 68, 0.3);
+        }
+        
+        .nav-links a[href="/category/gaming"] {
+            color: #ffaa00;
+            background: rgba(255, 170, 0, 0.1);
+            border: 1px solid rgba(255, 170, 0, 0.2);
+        }
+        
+        .nav-links a[href="/category/gaming"]:hover {
+            background: rgba(255, 170, 0, 0.2);
+            box-shadow: 0 8px 25px rgba(255, 170, 0, 0.3);
+        }
+        
+        .nav-links a[href="/category/tools"] {
+            color: #9d4edd;
+            background: rgba(157, 78, 221, 0.1);
+            border: 1px solid rgba(157, 78, 221, 0.2);
+        }
+        
+        .nav-links a[href="/category/tools"]:hover {
+            background: rgba(157, 78, 221, 0.2);
+            box-shadow: 0 8px 25px rgba(157, 78, 221, 0.3);
+        }
+        
+        /* Hamburger menu styles */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 8px;
+            cursor: pointer;
+            padding: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .hamburger:hover {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: rgba(0, 255, 136, 0.5);
+            transform: scale(1.05);
+        }
+        
+        .hamburger span {
+            width: 24px;
+            height: 3px;
+            background: #00ff88;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+        }
+        
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.98), rgba(26, 26, 26, 0.98));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 9999;
+            padding: 0;
+            overflow-y: auto;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .mobile-menu.active {
+            display: block;
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .mobile-menu-header {
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 204, 106, 0.05));
+        }
+        
+        .mobile-menu-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .mobile-menu-title i {
+            color: #00ff88;
+            filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.5));
+        }
+        
+        .mobile-menu-close {
+            background: rgba(0, 255, 136, 0.1);
+            border: 2px solid rgba(0, 255, 136, 0.3);
+            color: #00ff88;
+            font-size: 1.8rem;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-weight: 300;
+            line-height: 1;
+        }
+        
+        .mobile-menu-close:hover {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+            transform: rotate(90deg) scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+        }
+        
+        .mobile-nav-links {
+            list-style: none;
+            padding: 20px;
+            margin: 0;
+        }
+        
+        .mobile-nav-links li {
+            margin-bottom: 12px;
+            animation: slideInRight 0.4s ease-out backwards;
+        }
+        
+        .mobile-nav-links li:nth-child(1) { animation-delay: 0.05s; }
+        .mobile-nav-links li:nth-child(2) { animation-delay: 0.1s; }
+        .mobile-nav-links li:nth-child(3) { animation-delay: 0.15s; }
+        .mobile-nav-links li:nth-child(4) { animation-delay: 0.2s; }
+        .mobile-nav-links li:nth-child(5) { animation-delay: 0.25s; }
+        .mobile-nav-links li:nth-child(6) { animation-delay: 0.3s; }
+        .mobile-nav-links li:nth-child(7) { animation-delay: 0.35s; }
+        .mobile-nav-links li:nth-child(8) { animation-delay: 0.4s; }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .mobile-nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-left: 4px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mobile-nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 204, 106, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .mobile-nav-links a:hover::before {
+            opacity: 1;
+        }
+        
+        .mobile-nav-links a:hover {
+            transform: translateX(8px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .mobile-nav-links a i {
+            font-size: 1.3rem;
+            width: 24px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .mobile-nav-links a span {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .mobile-nav-links a[href="/"] {
+            border-left-color: #ffffff;
+        }
+        
+        .mobile-nav-links a[href="/"] i {
+            color: #ffffff;
+        }
+        
+        .mobile-nav-links a[href="/category/tech"] {
+            border-left-color: #00ff88;
+        }
+        
+        .mobile-nav-links a[href="/category/tech"] i {
+            color: #00ff88;
+        }
+        
+        .mobile-nav-links a[href="/category/cyber"] {
+            border-left-color: #00aaff;
+        }
+        
+        .mobile-nav-links a[href="/category/cyber"] i {
+            color: #00aaff;
+        }
+        
+        .mobile-nav-links a[href="/category/crypto"] {
+            border-left-color: #ff4444;
+        }
+        
+        .mobile-nav-links a[href="/category/crypto"] i {
+            color: #ff4444;
+        }
+        
+        .mobile-nav-links a[href="/category/gaming"] {
+            border-left-color: #ff8c00;
+        }
+        
+        .mobile-nav-links a[href="/category/gaming"] i {
+            color: #ff8c00;
+        }
+        
+        .mobile-nav-links a[href="/category/tools"] {
+            border-left-color: #9d4edd;
+        }
+        
+        .mobile-nav-links a[href="/category/tools"] i {
+            color: #9d4edd;
+        }
+        
+        .mobile-nav-links a[href="/category/vulnerabilities"] {
+            border-left-color: #ff4444;
+        }
+        
+        .mobile-nav-links a[href="/category/vulnerabilities"] i {
+            color: #ff4444;
+        }
+        
+        .mobile-nav-links a[href="/contact"] {
+            border-left-color: #00ff88;
+        }
+        
+        .mobile-nav-links a[href="/contact"] i {
+            color: #00ff88;
+        }
+        
+        /* Modern Category Hero */
+        .category-hero {
+            text-align: center;
+            padding: 80px 0 60px;
+            background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .category-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .category-icon-wrapper {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 204, 106, 0.1));
+            border: 3px solid rgba(0, 255, 136, 0.3);
+            margin-bottom: 30px;
+            position: relative;
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(0, 255, 136, 0); }
+        }
+        
+        .category-icon {
+            font-size: 3.5rem;
+            filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.6));
+        }
+        
+        .category-hero h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+        }
+        
+        .category-hero p {
+            font-size: 1.3rem;
+            color: #cccccc;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        /* Modern Posts Grid */
+        .posts-section {
+            margin-bottom: 80px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .section-header h2::before {
+            content: '';
+            width: 4px;
+            height: 40px;
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            border-radius: 2px;
+        }
+        
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        /* GitHub Tool Card Styling */
+        .github-tool-card {
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.95), rgba(20, 20, 20, 0.95));
+            position: relative;
+        }
+        
+        .github-tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #fff, #9d4edd, #fff);
+            opacity: 0.6;
+        }
+        
+        .github-tool-card:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(157, 78, 221, 0.3);
+        }
+        
+        .github-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: linear-gradient(135deg, #24292e, #1a1e22);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+        
+        .github-badge i {
+            font-size: 0.9rem;
+        }
+        
+        .github-repo-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #9d4edd;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 8px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            background: rgba(157, 78, 221, 0.1);
+            border: 1px solid rgba(157, 78, 221, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .github-repo-link:hover {
+            background: rgba(157, 78, 221, 0.2);
+            border-color: rgba(157, 78, 221, 0.5);
+            transform: translateX(3px);
+        }
+        
+        .github-repo-link i {
+            font-size: 1rem;
+        }
+        
+        .post-card {
+            background: #1a1a1a;
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .post-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00ff88, #00cc6a);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .post-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+        
+        .post-card:hover::before {
+            opacity: 1;
+        }
+        
+        .post-image-wrapper {
+            position: relative;
+            width: 100%;
+            height: 240px;
+            overflow: hidden;
+            background: #0a0a0a;
+        }
+        
+        .post-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .post-card:hover .post-image-wrapper img {
+            transform: scale(1.1);
+        }
+        
+        .post-category-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            color: #ffffff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 2;
+        }
+        
+        .post-content-wrapper {
+            padding: 24px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .post-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 12px;
+            color: #ffffff;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            transition: color 0.3s ease;
+        }
+        
+        .post-card:hover .post-title {
+            color: #00ff88;
+        }
+        
+        .post-excerpt {
+            font-size: 0.95rem;
+            color: #aaaaaa;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex-grow: 1;
+        }
+        
+        .post-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #888888;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .post-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .post-meta i {
+            color: #00ff88;
+            font-size: 0.9rem;
+        }
+        
+        /* Loading and Error States */
+        .loading {
+            text-align: center;
+            padding: 80px 20px;
+            font-size: 1.2rem;
+            color: #666;
+        }
+        
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+        
+        .error {
+            text-align: center;
+            padding: 80px 20px;
+            font-size: 1.2rem;
+            color: #ff4444;
+        }
+        
+        /* Google Translate - Completely removed (not working) */
+        #google_translate_element,
+        .goog-te-ftab,
+        .goog-te-ftab-link,
+        .goog-te-ftab-link span,
+        .goog-te-ftab-link img,
+        .goog-gt-tt,
+        .goog-gt-tt *,
+        .goog-te-banner-frame,
+        .goog-te-banner-frame.skiptranslate,
+        .goog-te-menu-frame,
+        .goog-te-menu2-item,
+        #google_translate_element + div,
+        body > div[style*="position: fixed"][style*="bottom"],
+        body > div[id*="goog-gt"],
+        div[id*="goog-gt-tt"] {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            height: 0 !important;
+            width: 0 !important;
+            overflow: hidden !important;
+            pointer-events: none !important;
+        }
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important;
+            max-width: 300px !important;
+        }
+        
+        .goog-te-menu2 {
+            background: #1a1a1a !important;
+            max-width: 100% !important;
+        }
+        
+        .goog-te-menu2-item {
+            color: #ffffff !important;
+            padding: 12px 15px !important;
+            border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+        }
+        
+        .goog-te-menu2-item:hover {
+            background: rgba(0,255,136,0.2) !important;
+            color: #00ff88 !important;
+        }
+        
+        .goog-te-menu2-item-selected {
+            background: rgba(0,255,136,0.3) !important;
+            color: #00ff88 !important;
+        }
+        
+        .goog-te-menu2-item div {
+            color: inherit !important;
+        }
+        
+        .goog-te-menu-value,
+        .goog-te-menu-value span,
+        .skiptranslate {
+            color: #ffffff !important;
+            background: transparent !important;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .posts-grid {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+                gap: 25px;
+            }
+            
+            .category-hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            
+            .logo {
+                font-size: 0.9rem;
+                gap: 4px;
+                padding: 3px 6px;
+            }
+            
+            .logo i {
+                font-size: 1rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+            
+            .category-hero {
+                padding: 50px 0 40px;
+            }
+            
+            .category-icon-wrapper {
+                width: 90px;
+                height: 90px;
+                margin-bottom: 20px;
+            }
+            
+            .category-icon {
+                font-size: 2.5rem;
+            }
+            
+            .category-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .category-hero p {
+                font-size: 1rem;
+                padding: 0 20px;
+            }
+            
+            .section-header h2 {
+                font-size: 1.8rem;
+            }
+            
+            .posts-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .post-image-wrapper {
+                height: 200px;
+            }
+            
+            .post-content-wrapper {
+                padding: 20px;
+            }
+            
+            .post-title {
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .category-hero {
+                padding: 40px 0 30px;
+            }
+            
+            .category-icon-wrapper {
+                width: 70px;
+                height: 70px;
+                margin-bottom: 15px;
+            }
+            
+            .category-icon {
+                font-size: 2rem;
+            }
+            
+            .category-hero h1 {
+                font-size: 1.6rem;
+            }
+            
+            .category-hero p {
+                font-size: 0.9rem;
+            }
+            
+            .section-header {
+                margin-bottom: 30px;
+            }
+            
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .post-image-wrapper {
+                height: 180px;
+            }
+            
+            .post-content-wrapper {
+                padding: 16px;
+            }
+            
+            .post-title {
+                font-size: 1rem;
+            }
+            
+            .post-excerpt {
+                font-size: 0.85rem;
+            }
+            
+            .post-meta {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+    <!-- Cookie Consent Script (GDPR & Google Consent Mode v2 Compliant) -->
+    <script src="/js/cookie-consent.js" defer></script>
+    
+    <!-- Google News Subscribe with Google (SWG) -->
+    <script async type="application/javascript"
+            src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
+    <script>
+      (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
+        basicSubscriptions.init({
+          type: "NewsArticle",
+          isPartOfType: ["Product"],
+          isPartOfProductId: "CAowoITDDA:openaccess",
+          clientOptions: { theme: "light", lang: "en" },
+        });
+      });
+    </script>
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8567280417220019"
+            crossorigin="anonymous"></script>
+<!-- Umami Analytics - Privacy-focused analytics -->
+    <!-- Umami Analytics - Privacy-focused analytics (respects cookie consent) -->
+    <script>
+        // Load Umami only if cookie consent is granted
+        let umamiLoaded = false;
+        
+        function loadUmami() {
+            // Don't load if already loaded
+            if (umamiLoaded) return;
+            
+            // Check cookie consent
+            if (getCookie('cookieConsent') === 'accepted') {
+                // Check if script already exists
+                if (document.querySelector('script[data-website-id="8961ffff-ba9e-435d-80dd-e793a0ed658c"]')) {
+                    umamiLoaded = true;
+                    return;
+                }
+                
+                const script = document.createElement('script');
+                script.async = true;
+                script.defer = true;
+                script.setAttribute('data-website-id', '8961ffff-ba9e-435d-80dd-e793a0ed658c');
+                script.setAttribute('data-host-url', 'https://analytics.${process.env.SITE_DOMAIN || 'localhost'}');
+                script.src = 'https://analytics.${process.env.SITE_DOMAIN || 'localhost'}/script.js';
+                
+                script.onload = function() {
+                    umamiLoaded = true;
+                    console.log('Umami analytics loaded');
+                };
+                
+                script.onerror = function() {
+                    console.error('Failed to load Umami analytics');
+                };
+                
+                document.head.appendChild(script);
+            }
+        }
+        
+        // Helper function to get cookie
+        function getCookie(name) {
+            const value = '; ' + document.cookie;
+            const parts = value.split('; ' + name + '=');
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+        
+        // Load on page load if consent already given
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                setTimeout(loadUmami, 100);
+            });
+        } else {
+            setTimeout(loadUmami, 100);
+        }
+        
+        // Listen for cookie consent acceptance
+        window.addEventListener('cookieConsentAccepted', function() {
+            setTimeout(loadUmami, 100);
+        });
+        
+        // Also check periodically in case cookie was set before script loaded
+        setTimeout(function() {
+            if (!umamiLoaded && getCookie('cookieConsent') === 'accepted') {
+                loadUmami();
+            }
+        }, 500);
+    </script>
+    </head>
+<body>
+    <!-- Cookie Consent Banner -->
+    <div id="cookieConsent" class="cookie-consent">
+        <div class="cookie-content">
+            <div class="cookie-title">🍪 Cookie Consent</div>
+            <div class="cookie-text">
+                We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. 
+                By clicking "Accept All", you consent to our use of cookies. 
+                <a href="/privacy-policy">Read our privacy policy</a>.
+            </div>
+        </div>
+        <div class="cookie-actions">
+            <button class="cookie-btn cookie-btn-reject" onclick="rejectCookies()">Reject All</button>
+            <button class="cookie-btn cookie-btn-settings" onclick="openCookieSettings()">Settings</button>
+            <button class="cookie-btn cookie-btn-accept" onclick="acceptCookies()">Accept All</button>
+        </div>
+    </div>
+    
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="/" class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>NexCMS</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/category/tech">Tech</a></li>
+                    <li><a href="/category/cyber">Cyber</a></li>
+                    <li><a href="/category/crypto">Crypto</a></li>
+                    <li><a href="/category/gaming">Gaming</a></li>
+                    <li><a href="/category/tools">Tools</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+                <button class="hamburger" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <div class="mobile-menu-title">
+                <i class="fas fa-shield-alt"></i>
+                <span>Navigation</span>
+            </div>
+            <button class="mobile-menu-close" onclick="toggleMobileMenu()">×</button>
+        </div>
+        <ul class="mobile-nav-links">
+            <li><a href="/" onclick="toggleMobileMenu()"><i class="fas fa-home"></i><span>Home</span></a></li>
+            <li><a href="/category/tech" onclick="toggleMobileMenu()"><i class="fas fa-microchip"></i><span>Tech</span></a></li>
+            <li><a href="/category/cyber" onclick="toggleMobileMenu()"><i class="fas fa-shield-alt"></i><span>Cyber</span></a></li>
+            <li><a href="/category/crypto" onclick="toggleMobileMenu()"><i class="fab fa-bitcoin"></i><span>Crypto</span></a></li>
+            <li><a href="/category/gaming" onclick="toggleMobileMenu()"><i class="fas fa-gamepad"></i><span>Gaming</span></a></li>
+            <li><a href="/category/tools" onclick="toggleMobileMenu()"><i class="fas fa-tools"></i><span>Tools</span></a></li>
+            <li><a href="/category/vulnerabilities" onclick="toggleMobileMenu()"><i class="fas fa-bug"></i><span>Vulnerabilities</span></a></li>
+            <li><a href="/contact" onclick="toggleMobileMenu()"><i class="fas fa-envelope"></i><span>Contact</span></a></li>
+        </ul>
+    </div>
+
+    <!-- Category Hero -->
+    <section class="category-hero" id="categoryHero">
+        <div class="container">
+            <div class="category-icon-wrapper">
+                <i class="fas fa-folder category-icon" id="categoryIcon"></i>
+            </div>
+            <h1 id="categoryName"></h1>
+            <p id="categoryDescription">Stay updated with the latest news in this category.</p>
+        </div>
+    </section>
+
+    <!-- Posts Section -->
+    <section class="posts-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 id="categoryPostsTitle">Latest Posts</h2>
+            </div>
+            
+            <!-- Crypto Prices Widget (only for Crypto category) -->
+            <div id="cryptoPricesWidget" style="display: none; margin-bottom: 40px;">
+                <div style="background: linear-gradient(135deg, rgba(255, 68, 68, 0.1), rgba(255, 68, 68, 0.05)); border-radius: 12px; border: 1px solid rgba(255, 68, 68, 0.2); padding: 25px; margin-bottom: 30px;">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+                        <i class="fab fa-bitcoin" style="font-size: 1.8rem; color: #ff4444;"></i>
+                        <h3 style="margin: 0; color: #fff; font-size: 1.3rem; font-weight: 700;">Live Cryptocurrency Prices</h3>
+                        <span id="cryptoPricesLastUpdate" style="color: #888; font-size: 0.85rem; margin-left: auto;"></span>
+                    </div>
+                    <div id="cryptoPricesGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                        <!-- Prices will be loaded here -->
+                    </div>
+                    <div id="cryptoPricesLoading" style="text-align: center; color: #888; padding: 20px;">
+                        <i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i>
+                        Loading cryptocurrency prices...
+                    </div>
+                </div>
+            </div>
+            
+            <div class="posts-grid" id="categoryPostsGrid">
+            </div>
+            <div id="loadMoreContainer" style="text-align: center; margin-top: 40px; display: none;">
+                <button id="loadMoreBtn" style="background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; border: none; padding: 15px 40px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);">
+                    <i class="fas fa-arrow-down" style="margin-right: 8px;"></i>
+                    Load More Posts
+                </button>
+                <div id="loadingMore" style="display: none; color: #00ff88; margin-top: 20px;">
+                    <i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i>
+                    Loading more posts...
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Google Analytics and GTM -->
+    <script>
+        if (window.innerWidth > 768) {
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-PXHKD8WC');
+
+            (function() {
+                var script = document.createElement('script');
+                script.async = true;
+                script.src = 'https://www.googletagmanager.com/gtag/js?id=G-X741SFHN2S';
+                document.head.appendChild(script);
+                
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'G-X741SFHN2S');
+                window.gtag = gtag;
+            })();
+        } else {
+            window.gtag = function() {};
+            window.dataLayer = [];
+        }
+    </script>
+
+    <script>
+        // Function to get short category name
+        function getShortCategoryName(category) {
+            if (!category) return 'UNCAT';
+            const shortMap = {
+                'technology': 'TECH',
+                'cybersecurity': 'CYBER',
+                'cryptocurrency': 'CRYPTO',
+                'gaming': 'GAMING',
+                'tech': 'TECH',
+                'cyber': 'CYBER',
+                'crypto': 'CRYPTO',
+                'game': 'GAMING'
+            };
+            return shortMap[category.slug?.toLowerCase()] || shortMap[category.name?.toLowerCase()] || category.name?.substring(0, 6).toUpperCase() || 'UNCAT';
+        }
+        
+        function formatDate(dateString) {
+            if (!dateString) return 'Unknown date';
+            
+            const date = new Date(dateString);
+            const now = new Date();
+            
+            const dateStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            const nowStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const diffDays = Math.floor((nowStart - dateStart) / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) {
+                const hours = Math.floor((now - date) / (1000 * 60 * 60));
+                if (hours < 1) return 'Just now';
+                if (hours === 1) return '1 hour ago';
+                return `${hours} hours ago`;
+            }
+            
+            if (diffDays === 1) return 'Yesterday';
+            if (diffDays < 7) return `${diffDays} days ago`;
+            if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+            
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+            });
+        }
+        
+        // Global variables for pagination
+        let currentCategory = null;
+        let currentPage = 1;
+        let totalPages = 1;
+        let totalPosts = 0;
+        let postsPerPage = 12;
+        let allLoadedPosts = [];
+        
+        async function loadCategoryContent() {
+            const categorySlug = window.location.pathname.split('/').pop();
+            postsPerPage = window.innerWidth > 768 ? 12 : 6;
+            currentPage = 1;
+            allLoadedPosts = [];
+            
+            try {
+                // Fetch category details
+                const categoryResponse = await fetch(`/api/categories/${categorySlug}`);
+                if (!categoryResponse.ok) throw new Error('Category not found');
+                const category = await categoryResponse.json();
+                currentCategory = category;
+                
+                // Update page elements
+                document.getElementById('categoryPageTitle').textContent = `${category.name} - NexCMS`;
+                document.getElementById('categoryPageDescription').textContent = `Explore the latest news and articles in ${category.name}.`;
+                document.getElementById('categoryName').textContent = category.name;
+                document.getElementById('categoryDescription').textContent = category.description || `Stay updated with the latest news in ${category.name}.`;
+                document.getElementById('categoryIcon').className = `fas ${category.icon || 'fa-folder'} category-icon`;
+                document.getElementById('categoryHero').style.borderBottomColor = category.color || '#00ff88';
+                document.getElementById('categoryPostsTitle').textContent = `Latest ${category.name} Posts`;
+                
+                // Update category icon wrapper color
+                const iconWrapper = document.querySelector('.category-icon-wrapper');
+                if (iconWrapper && category.color) {
+                    iconWrapper.style.background = `linear-gradient(135deg, ${category.color}40, ${category.color}20)`;
+                    iconWrapper.style.borderColor = `${category.color}50`;
+                }
+                
+                // Load crypto prices if Crypto category
+                if (category.slug === 'crypto') {
+                    loadCryptoPrices();
+                }
+                
+                // Fetch first page of posts
+                await loadMorePosts(category, true);
+                
+            } catch (error) {
+                console.error('Error loading category content:', error);
+                const grid = document.getElementById('categoryPostsGrid');
+                if (grid) {
+                    grid.innerHTML = `<div class="error">Error loading posts: ${error.message}</div>`;
+                }
+            }
+        }
+        
+        async function loadMorePosts(category, isInitial = false) {
+            try {
+                const loadingMore = document.getElementById('loadingMore');
+                const loadMoreBtn = document.getElementById('loadMoreBtn');
+                const loadMoreContainer = document.getElementById('loadMoreContainer');
+                
+                if (!isInitial && loadingMore && loadMoreBtn) {
+                    loadingMore.style.display = 'block';
+                    loadMoreBtn.style.display = 'none';
+                }
+                
+                // Fetch posts with pagination
+                const postsResponse = await fetch(`/api/posts?category=${category._id}&limit=${postsPerPage}&page=${currentPage}`);
+                if (!postsResponse.ok) throw new Error(`Failed to fetch posts: ${postsResponse.status}`);
+                
+                const postsData = await postsResponse.json();
+                let posts = postsData.posts || [];
+                totalPages = postsData.totalPages || 1;
+                totalPosts = postsData.total || 0;
+                
+                // Only filter out CVE/Vulnerability posts if NOT viewing the Vulnerabilities category
+                const isVulnerabilitiesCategory = category.slug === 'vulnerabilities';
+                
+                if (!isVulnerabilitiesCategory) {
+                    // Filter out CVE/Vulnerability posts for other categories
+                    posts = posts.filter(post => {
+                        if (!post || !post.title) return false;
+                        const title = String(post.title || '').trim();
+                        // Exclude CVE posts and posts from Vulnerabilities category
+                        const isCVE = /^CVE-\d{4}-\d+/i.test(title);
+                        const hasJSON = title.includes('{"Source"') || (title.startsWith('{') && title.includes('"Title"'));
+                        const isVulnCategory = post.category && (post.category.slug === 'vulnerabilities' || String(post.category) === 'vulnerabilities');
+                        return !isCVE && !hasJSON && !isVulnCategory;
+                    });
+                    console.log(`Displaying ${posts.length} posts (filtered out CVE/Vulnerability posts)`);
+                } else {
+                    console.log(`Displaying ${posts.length} posts in Vulnerabilities category`);
+                }
+                
+                // Add to all loaded posts
+                allLoadedPosts = [...allLoadedPosts, ...posts];
+                
+                // Add GitHub tools header for Tools category (only on initial load)
+                if (isInitial && category.slug === 'tools') {
+                    const githubCount = allLoadedPosts.filter(p => {
+                        const githubInfo = extractGitHubInfo(p);
+                        return githubInfo.isGitHub;
+                    }).length;
+                    
+                    if (githubCount > 0) {
+                        const grid = document.getElementById('categoryPostsGrid');
+                        const existingHeader = document.querySelector('.github-tools-header');
+                        if (!existingHeader && grid) {
+                            const headerHTML = `
+                                <div class="github-tools-header" style="margin-bottom: 30px; padding: 20px; background: linear-gradient(135deg, rgba(157, 78, 221, 0.1), rgba(157, 78, 221, 0.05)); border-radius: 12px; border: 1px solid rgba(157, 78, 221, 0.2);">
+                                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                        <i class="fab fa-github" style="font-size: 1.5rem; color: #9d4edd;"></i>
+                                        <h3 style="margin: 0; color: #fff; font-size: 1.2rem;">Community GitHub Tools</h3>
+                                    </div>
+                                    <p style="margin: 0; color: #aaa; font-size: 0.9rem;">
+                                        Discover ${githubCount} open-source tools from the GitHub community. Click "View on GitHub" to explore the repositories.
+                                    </p>
+                                </div>
+                            `;
+                            grid.insertAdjacentHTML('beforebegin', headerHTML);
+                        }
+                    }
+                }
+                
+                // Display all loaded posts
+                if (isInitial) {
+                    displayPosts(allLoadedPosts, category);
+                } else {
+                    appendPosts(posts, category);
+                }
+                
+                // Update load more button
+                if (loadingMore) loadingMore.style.display = 'none';
+                if (loadMoreBtn && loadMoreContainer) {
+                    if (currentPage < totalPages) {
+                        loadMoreBtn.style.display = 'inline-block';
+                        loadMoreContainer.style.display = 'block';
+                        loadMoreBtn.innerHTML = `<i class="fas fa-arrow-down" style="margin-right: 8px;"></i> Load More Posts (${allLoadedPosts.length} / ${totalPosts})`;
+                    } else {
+                        loadMoreContainer.style.display = 'none';
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error loading more posts:', error);
+                const loadingMore = document.getElementById('loadingMore');
+                const loadMoreBtn = document.getElementById('loadMoreBtn');
+                if (loadingMore) loadingMore.style.display = 'none';
+                if (loadMoreBtn) loadMoreBtn.style.display = 'inline-block';
+            }
+        }
+        
+        function appendPosts(posts, category) {
+            const grid = document.getElementById('categoryPostsGrid');
+            if (!grid || posts.length === 0) return;
+            
+            // Sort posts: GitHub tools first for Tools category
+            if (category.slug === 'tools') {
+                posts.sort((a, b) => {
+                    const aGitHub = extractGitHubInfo(a).isGitHub;
+                    const bGitHub = extractGitHubInfo(b).isGitHub;
+                    if (aGitHub && !bGitHub) return -1;
+                    if (!aGitHub && bGitHub) return 1;
+                    return 0;
+                });
+            }
+            
+            posts.forEach(post => {
+                const cleanPostTitle = cleanTitle(post.title);
+                const cleanPostExcerpt = post.excerpt ? cleanTitle(post.excerpt) : '';
+                const githubInfo = extractGitHubInfo(post);
+                const isGitHubTool = githubInfo.isGitHub;
+                const isToolsCategory = category.slug === 'tools';
+                const cardClass = isGitHubTool && isToolsCategory ? 'post-card github-tool-card' : 'post-card';
+                const githubBadge = isGitHubTool && isToolsCategory ? `
+                    <span class="github-badge" title="GitHub Community Tool">
+                        <i class="fab fa-github"></i> GitHub
+                    </span>
+                ` : '';
+                const githubLink = githubInfo.url ? `
+                    <a href="${githubInfo.url}" target="_blank" rel="noopener noreferrer" class="github-repo-link" onclick="event.stopPropagation();">
+                        <i class="fab fa-github"></i> View on GitHub
+                    </a>
+                ` : '';
+                
+                const postCard = `
+                    <div class="${cardClass}" onclick="window.location.href='/posts/${post.slug || post._id}'">
+                        <div class="post-image-wrapper">
+                            <img src="${post.thumbnail?.url || 'https://via.placeholder.com/400x240/333/fff?text=No+Image'}" 
+                                 alt="${cleanPostTitle}" loading="lazy" decoding="async">
+                            <span class="post-category-badge" style="background: ${category.color || '#00ff88'}; color: ${category.color === '#00ff88' ? '#000' : '#fff'}">
+                                ${getShortCategoryName(category)}
+                            </span>
+                            ${githubBadge}
+                        </div>
+                        <div class="post-content-wrapper">
+                            <h3 class="post-title">
+                                ${isGitHubTool && isToolsCategory ? '<i class="fab fa-github" style="color: #fff; margin-right: 8px;"></i>' : ''}
+                                ${cleanPostTitle}
+                            </h3>
+                            <p class="post-excerpt">${cleanPostExcerpt}</p>
+                            ${githubLink}
+                            <div class="post-meta">
+                                <span><i class="fas fa-calendar"></i> ${formatDate(post.publishedAt)}</span>
+                                <span><i class="fas fa-eye"></i> ${post.views || 0}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.insertAdjacentHTML('beforeend', postCard);
+            });
+        }
+        
+        // Extract GitHub repository info from post content/title
+        function extractGitHubInfo(post) {
+            const githubRegex = /github\.com\/([a-zA-Z0-9_.-]+)\/([a-zA-Z0-9_.-]+)/gi;
+            const content = (post.content || post.contentHtml || post.title || '').toLowerCase();
+            const matches = [...content.matchAll(githubRegex)];
+            
+            if (matches.length > 0) {
+                const match = matches[0];
+                return {
+                    owner: match[1],
+                    repo: match[2],
+                    url: `https://github.com/${match[1]}/${match[2]}`,
+                    isGitHub: true
+                };
+            }
+            
+            // Also check if title mentions GitHub
+            if (post.title && /github/i.test(post.title)) {
+                return { isGitHub: true };
+            }
+            
+            return { isGitHub: false };
+        }
+        
+        // Clean title function to remove JSON artifacts
+        function cleanTitle(title) {
+            if (!title) return '';
+            let clean = String(title);
+            
+            // Try to extract title from JSON format: {"Source": "...", "Title": "..."}
+            const jsonMatch = clean.match(/\{[\s\S]*?"Title"\s*:\s*"([^"]+)"[\s\S]*?\}/);
+            if (jsonMatch && jsonMatch[1]) {
+                clean = jsonMatch[1].trim();
+            } else {
+                // Try parsing as JSON
+                try {
+                    const jsonData = JSON.parse(clean);
+                    if (jsonData.Title) {
+                        clean = jsonData.Title.trim();
+                    } else if (jsonData.title) {
+                        clean = jsonData.title.trim();
+                    }
+                } catch (e) {
+                    // If not valid JSON, try regex replacement
+                    clean = clean.replace(/^\{.*?"Title"\s*:\s*"/, '').replace(/"\s*\}.*$/, '');
+                    clean = clean.replace(/^\{.*?"title"\s*:\s*"/, '').replace(/"\s*\}.*$/, '');
+                }
+            }
+            
+            // Clean up any remaining artifacts
+            clean = clean.replace(/\\n/g, ' ').replace(/\s+/g, ' ').trim();
+            return clean || title; // Fallback to original if cleaning fails
+        }
+        
+        function displayPosts(posts, category) {
+            const grid = document.getElementById('categoryPostsGrid');
+            grid.innerHTML = '';
+            
+            if (posts.length === 0) {
+                grid.innerHTML = `<div class="error" style="text-align: center; padding: 40px; color: #888;">No posts found in this category.</div>`;
+                return;
+            }
+            
+            // Sort posts: GitHub tools first for Tools category
+            if (category.slug === 'tools') {
+                posts.sort((a, b) => {
+                    const aGitHub = extractGitHubInfo(a).isGitHub;
+                    const bGitHub = extractGitHubInfo(b).isGitHub;
+                    if (aGitHub && !bGitHub) return -1;
+                    if (!aGitHub && bGitHub) return 1;
+                    return 0;
+                });
+            }
+            
+            posts.forEach(post => {
+                // Clean the title before displaying
+                const cleanPostTitle = cleanTitle(post.title);
+                const cleanPostExcerpt = post.excerpt ? cleanTitle(post.excerpt) : '';
+                
+                // Check if this is a GitHub tool
+                const githubInfo = extractGitHubInfo(post);
+                const isGitHubTool = githubInfo.isGitHub;
+                const isToolsCategory = category.slug === 'tools';
+                
+                // Enhanced styling for GitHub tools
+                const cardClass = isGitHubTool && isToolsCategory ? 'post-card github-tool-card' : 'post-card';
+                const githubBadge = isGitHubTool && isToolsCategory ? `
+                    <span class="github-badge" title="GitHub Community Tool">
+                        <i class="fab fa-github"></i> GitHub
+                    </span>
+                ` : '';
+                
+                const githubLink = githubInfo.url ? `
+                    <a href="${githubInfo.url}" target="_blank" rel="noopener noreferrer" class="github-repo-link" onclick="event.stopPropagation();">
+                        <i class="fab fa-github"></i> View on GitHub
+                    </a>
+                ` : '';
+                
+                const postCard = `
+                    <div class="${cardClass}" onclick="window.location.href='/posts/${post.slug || post._id}'">
+                        <div class="post-image-wrapper">
+                            <img src="${post.thumbnail?.url || 'https://via.placeholder.com/400x240/333/fff?text=No+Image'}" 
+                                 alt="${cleanPostTitle}" loading="lazy" decoding="async">
+                            <span class="post-category-badge" style="background: ${category.color || '#00ff88'}; color: ${category.color === '#00ff88' ? '#000' : '#fff'}">
+                                ${getShortCategoryName(category)}
+                            </span>
+                            ${githubBadge}
+                        </div>
+                        <div class="post-content-wrapper">
+                            <h3 class="post-title">
+                                ${isGitHubTool && isToolsCategory ? '<i class="fab fa-github" style="color: #fff; margin-right: 8px;"></i>' : ''}
+                                ${cleanPostTitle}
+                            </h3>
+                            <p class="post-excerpt">${cleanPostExcerpt}</p>
+                            ${githubLink}
+                            <div class="post-meta">
+                                <span><i class="fas fa-calendar"></i> ${formatDate(post.publishedAt)}</span>
+                                <span><i class="fas fa-eye"></i> ${post.views || 0}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.insertAdjacentHTML('beforeend', postCard);
+            });
+        }
+        
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (mobileMenu) {
+                mobileMenu.classList.toggle('active');
+            }
+        }
+        
+        // Load cryptocurrency prices
+        async function loadCryptoPrices() {
+            try {
+                const widget = document.getElementById('cryptoPricesWidget');
+                const grid = document.getElementById('cryptoPricesGrid');
+                const loading = document.getElementById('cryptoPricesLoading');
+                
+                if (!widget || !grid) return;
+                
+                widget.style.display = 'block';
+                loading.style.display = 'block';
+                grid.innerHTML = '';
+                
+                const response = await fetch('/api/crypto-prices');
+                if (!response.ok) throw new Error('Failed to fetch prices');
+                
+                const data = await response.json();
+                if (!data.success || !data.prices) throw new Error('Invalid price data');
+                
+                loading.style.display = 'none';
+                
+                // Display prices
+                data.prices.forEach(crypto => {
+                    const changeColor = crypto.change24h >= 0 ? '#00ff88' : '#ff4444';
+                    const changeIcon = crypto.change24h >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
+                    
+                    const priceCard = `
+                        <div style="background: rgba(0, 0, 0, 0.3); border-radius: 8px; padding: 15px; border: 1px solid rgba(255, 68, 68, 0.2); transition: all 0.3s;" 
+                             onmouseover="this.style.background='rgba(0, 0, 0, 0.5)'; this.style.borderColor='rgba(255, 68, 68, 0.4)'" 
+                             onmouseout="this.style.background='rgba(0, 0, 0, 0.3)'; this.style.borderColor='rgba(255, 68, 68, 0.2)'">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                                <div>
+                                    <div style="font-weight: 700; color: #fff; font-size: 1.1rem; margin-bottom: 4px;">${crypto.symbol}</div>
+                                    <div style="color: #888; font-size: 0.85rem;">${crypto.name}</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 8px;">
+                                $${crypto.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 6px; color: ${changeColor}; font-size: 0.9rem; font-weight: 600;">
+                                <i class="fas ${changeIcon}" style="font-size: 0.8rem;"></i>
+                                ${Math.abs(crypto.change24h).toFixed(2)}%
+                            </div>
+                        </div>
+                    `;
+                    grid.insertAdjacentHTML('beforeend', priceCard);
+                });
+                
+                // Update last update time
+                const lastUpdate = document.getElementById('cryptoPricesLastUpdate');
+                if (lastUpdate) {
+                    lastUpdate.textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+                }
+                
+                // Auto-refresh every 60 seconds
+                setTimeout(loadCryptoPrices, 60000);
+                
+            } catch (error) {
+                console.error('Error loading crypto prices:', error);
+                const loading = document.getElementById('cryptoPricesLoading');
+                if (loading) {
+                    loading.innerHTML = '<span style="color: #ff4444;">Failed to load prices. Retrying...</span>';
+                    setTimeout(loadCryptoPrices, 5000);
+                }
+            }
+        }
+        
+        // Load more button handler
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCategoryContent();
+            
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            if (loadMoreBtn) {
+                loadMoreBtn.addEventListener('click', async function() {
+                    if (currentCategory && currentPage < totalPages) {
+                        currentPage++;
+                        await loadMorePosts(currentCategory, false);
+                    }
+                });
+            }
+            
+            // Hover effect for load more button
+            if (loadMoreBtn) {
+                loadMoreBtn.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.boxShadow = '0 6px 20px rgba(0, 255, 136, 0.4)';
+                });
+                loadMoreBtn.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 4px 15px rgba(0, 255, 136, 0.3)';
+                });
+            }
+        });
+        
+        // GDPR Cookie Consent Functions
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+        
+        function setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Strict`;
+        }
+        
+        function checkCookieConsent() {
+            const consent = getCookie('cookieConsent');
+            if (!consent) {
+                document.getElementById('cookieConsent').classList.add('active');
+                window.gtag = function() {};
+                window.dataLayer = [];
+            } else if (consent === 'accepted') {
+                // User accepted - Google Analytics already loaded
+            } else if (consent === 'rejected') {
+                window.gtag = function() {};
+                window.dataLayer = [];
+            }
+        }
+        
+        function acceptCookies() {
+            setCookie('cookieConsent', 'accepted', 365);
+            document.getElementById('cookieConsent').classList.remove('active');
+            if (typeof gtag === 'undefined' || window.gtag.toString().includes('function()')) {
+                loadGoogleAnalytics();
+            }
+            
+            // Trigger Umami load event
+            window.dispatchEvent(new Event('cookieConsentAccepted'));
+        }
+        
+        function rejectCookies() {
+            setCookie('cookieConsent', 'rejected', 365);
+            document.getElementById('cookieConsent').classList.remove('active');
+            window.gtag = function() {};
+            window.dataLayer = [];
+        }
+        
+        function openCookieSettings() {
+            alert('Cookie Settings\n\nThis site uses:\n- Essential cookies (required)\n- Analytics cookies (Google Analytics)\n\nManage your preferences by accepting or rejecting cookies.');
+        }
+        
+        function loadGoogleAnalytics() {
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-PXHKD8WC');
+            
+            const script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-X741SFHN2S';
+            document.head.appendChild(script);
+            
+            script.onload = function() {
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                window.gtag = gtag;
+                gtag('js', new Date());
+                gtag('config', 'G-X741SFHN2S');
+            };
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            checkCookieConsent();
+        });
+    </script>
+    
+    <!-- Footer -->
+    <footer class="footer" style="background: #1a1a1a; border-top: 2px solid #333; padding: 40px 0 20px; margin-top: 60px;">
+        <div class="container">
+            <div style="text-align: center;">
+                <div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; flex-wrap: wrap;">
+                    <a href="/" style="color: #cccccc; text-decoration: none; transition: color 0.3s ease;">Home</a>
+                    <a href="/category/tech" style="color: #cccccc; text-decoration: none; transition: color 0.3s ease;">Tech</a>
+                    <a href="/category/cyber" style="color: #cccccc; text-decoration: none; transition: color 0.3s ease;">Cyber</a>
+                    <a href="/category/crypto" style="color: #cccccc; text-decoration: none; transition: color 0.3s ease;">Crypto</a>
+                    <a href="/category/gaming" style="color: #cccccc; text-decoration: none; transition: color 0.3s ease;">Gaming</a>
+                    <a href="/category/tools" style="color: #cccccc; text-decoration: none; transition: color 0.3s ease;">Tools</a>
+                    <a href="/contact" style="color: #cccccc; text-decoration: none; transition: color 0.3s ease;">Contact</a>
+                    <a href="/privacy-policy" style="color: #cccccc; text-decoration: none; transition: color 0.3s ease;">Privacy Policy</a>
+                    <a href="/terms-of-service" style="color: #cccccc; text-decoration: none; transition: color 0.3s ease;">Terms of Service</a>
+                </div>
+                <div style="color: #666; font-size: 0.9rem; padding-top: 20px; border-top: 1px solid #333;">
+                    <p>&copy; 2025 NexCMS. All rights reserved. | Contact: <a href="mailto:nexcms@proton.me" style="color: #00ff88; text-decoration: none;">nexcms@proton.me</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - NexCMS</title>
+    <meta name="description" content="Terms of Service for NexCMS - Read our terms and conditions for using our news platform covering cybersecurity, technology, crypto, and gaming.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="${process.env.SITE_URL || 'http://localhost:3000'}/terms-of-service">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5a8f3b2c">
+    <link rel="apple-touch-icon" href="/favicon.svg?v=5a8f3b2c">
+    <meta name="theme-color" content="#0a0a0a">
+    
+    <!-- Google AdSense Account -->
+    <meta name="google-adsense-account" content="ca-pub-8567280417220019">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+    <!-- Cookie Consent Script -->
+    <script src="/js/cookie-consent.js" defer></script>
+    
+    <!-- Google News Subscribe with Google (SWG) -->
+    <script async type="application/javascript"
+            src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
+    <script>
+      (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
+        basicSubscriptions.init({
+          type: "NewsArticle",
+          isPartOfType: ["Product"],
+          isPartOfProductId: "CAowoITDDA:openaccess",
+          clientOptions: { theme: "light", lang: "en" },
+        });
+      });
+    </script>
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8567280417220019"
+            crossorigin="anonymous"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            padding: 20px 0;
+            border-bottom: 2px solid #333;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #00ff88;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logo:hover {
+            color: #00cc6a;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #00ff88;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .last-updated {
+            color: #888;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            color: #00ff88;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+        
+        h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #cccccc;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            color: #cccccc;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+            color: #cccccc;
+        }
+        
+        li {
+            margin-bottom: 10px;
+        }
+        
+        a {
+            color: #00ff88;
+            text-decoration: underline;
+        }
+        
+        a:hover {
+            color: #00cc6a;
+        }
+        
+        code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        
+        .highlight-box {
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 4px solid #00ff88;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+        
+        .age-restriction {
+            background: rgba(255, 68, 68, 0.1);
+            border-left: 4px solid #ff4444;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+        
+        .age-restriction h3 {
+            color: #ff4444;
+        }
+        
+        /* Cookie Consent CSS */
+        .cookie-consent {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+            color: #ffffff;
+            padding: 20px 30px;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            display: none;
+            border-top: 2px solid #00ff88;
+        }
+        
+        .cookie-consent.active {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .cookie-content {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .cookie-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #00ff88;
+            margin-bottom: 8px;
+        }
+        
+        .cookie-text {
+            font-size: 0.9rem;
+            color: #cccccc;
+            line-height: 1.5;
+        }
+        
+        .cookie-text a {
+            color: #00ff88;
+            text-decoration: underline;
+        }
+        
+        .cookie-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .cookie-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .cookie-btn-accept {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #000000;
+        }
+        
+        .cookie-btn-accept:hover {
+            background: linear-gradient(135deg, #00cc6a, #00aa55);
+            transform: translateY(-2px);
+        }
+        
+        .cookie-btn-reject {
+            background: transparent;
+            color: #ffffff;
+            border: 2px solid #666;
+        }
+        
+        .cookie-btn-reject:hover {
+            border-color: #999;
+        }
+        
+        .cookie-btn-settings {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+        
+        .cookie-btn-settings:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .cookie-consent.active {
+                flex-direction: column;
+            }
+            
+            .cookie-actions {
+                width: 100%;
+                flex-direction: column;
+            }
+            
+            .cookie-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cookie Consent Banner -->
+    <div id="cookieConsent" class="cookie-consent">
+        <div class="cookie-content">
+            <div class="cookie-title">🍪 Cookie Consent</div>
+            <div class="cookie-text">
+                We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. 
+                By clicking "Accept All", you consent to our use of cookies. 
+                <a href="/privacy-policy.html">Read our privacy policy</a>.
+            </div>
+        </div>
+        <div class="cookie-actions">
+            <button class="cookie-btn cookie-btn-reject" onclick="rejectCookies()">Reject All</button>
+            <button class="cookie-btn cookie-btn-settings" onclick="openCookieSettings()">Settings</button>
+            <button class="cookie-btn cookie-btn-accept" onclick="acceptCookies()">Accept All</button>
+        </div>
+    </div>
+    
+    <header class="header">
+        <nav class="nav">
+            <a href="/" class="logo">
+                <i class="fas fa-shield-alt"></i> NexCMS
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="/terms-of-service.html">Terms of Service</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <h1>Terms of Service</h1>
+        <p class="last-updated">Last Updated: January 28, 2025</p>
+        
+        <div class="age-restriction">
+            <h3><i class="fas fa-exclamation-triangle"></i> Age Restriction</h3>
+            <p><strong>Our content is intended for users aged 13 and above.</strong> Users under 13 must obtain parental consent before accessing our services. Some content may contain topics related to cybersecurity, technology, cryptocurrency, and gaming that require maturity to understand and engage with appropriately.</p>
+        </div>
+        
+        <div class="section">
+            <h2>1. Acceptance of Terms</h2>
+            <p>By accessing and using NexCMS ("we", "us", "our", "the website"), you accept and agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use our website.</p>
+            <p>These Terms apply to all visitors, users, and others who access or use the service. Your use of the website is also governed by our <a href="/privacy-policy.html">Privacy Policy</a>.</p>
+        </div>
+        
+        <div class="section">
+            <h2>2. Description of Service</h2>
+            <p>NexCMS is a news and content platform that provides articles, news, and information about:</p>
+            <ul>
+                <li>Cybersecurity and information security</li>
+                <li>Technology and innovation</li>
+                <li>Cryptocurrency and blockchain</li>
+                <li>Gaming and entertainment technology</li>
+            </ul>
+            <p>We reserve the right to modify, suspend, or discontinue any aspect of our service at any time, with or without notice.</p>
+        </div>
+        
+        <div class="section">
+            <h2>3. User Responsibilities</h2>
+            <h3>3.1 Age Requirement</h3>
+            <p>You must be at least 13 years old to use our service. Users between 13 and 18 years old should have parental or guardian supervision when using our platform.</p>
+            
+            <h3>3.2 Acceptable Use</h3>
+            <p>You agree to use our website only for lawful purposes and in a way that does not infringe the rights of others or restrict or inhibit anyone else's use of the website.</p>
+            <p>You agree NOT to:</p>
+            <ul>
+                <li>Violate any applicable laws or regulations</li>
+                <li>Infringe upon the intellectual property rights of others</li>
+                <li>Transmit any harmful, offensive, or illegal content</li>
+                <li>Attempt to gain unauthorized access to our systems</li>
+                <li>Use automated systems or bots to scrape or collect data without permission</li>
+                <li>Interfere with or disrupt the website's operation</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>4. Intellectual Property</h2>
+            <h3>4.1 Our Content</h3>
+            <p>All content on NexCMS, including but not limited to text, graphics, logos, images, and software, is the property of NexCMS or its content suppliers and is protected by copyright, trademark, and other intellectual property laws.</p>
+            
+            <h3>4.2 Limited License</h3>
+            <p>We grant you a limited, non-exclusive, non-transferable license to access and use our website for personal, non-commercial purposes. You may not:</p>
+            <ul>
+                <li>Reproduce, distribute, or create derivative works without permission</li>
+                <li>Use our content for commercial purposes without written consent</li>
+                <li>Remove any copyright or proprietary notices</li>
+            </ul>
+            
+            <h3>4.3 User-Generated Content</h3>
+            <p>If you submit content to our website (comments, submissions, etc.), you grant us a non-exclusive, royalty-free, perpetual license to use, modify, and display such content on our platform.</p>
+        </div>
+        
+        <div class="section">
+            <h2>5. Disclaimer of Warranties</h2>
+            <p>NexCMS provides content "as is" and "as available" without warranties of any kind, either express or implied, including but not limited to:</p>
+            <ul>
+                <li>Accuracy, completeness, or reliability of content</li>
+                <li>Fitness for a particular purpose</li>
+                <li>Non-infringement of third-party rights</li>
+                <li>Uninterrupted or error-free service</li>
+            </ul>
+            <p>We do not warrant that our website will be secure, free from viruses or other harmful components, or that defects will be corrected.</p>
+        </div>
+        
+        <div class="section">
+            <h2>6. Limitation of Liability</h2>
+            <p>To the fullest extent permitted by law, NexCMS and its affiliates, officers, directors, employees, and agents shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to:</p>
+            <ul>
+                <li>Loss of profits, data, or use</li>
+                <li>Business interruption</li>
+                <li>Personal injury or property damage</li>
+            </ul>
+            <p>This limitation applies regardless of the legal theory under which liability is asserted.</p>
+        </div>
+        
+        <div class="section">
+            <h2>7. Third-Party Links and Content</h2>
+            <p>Our website may contain links to third-party websites or services that are not owned or controlled by NexCMS. We are not responsible for:</p>
+            <ul>
+                <li>The content, privacy policies, or practices of third-party sites</li>
+                <li>Any damages or losses resulting from your use of third-party services</li>
+            </ul>
+            <p>You acknowledge that we are not responsible or liable for any third-party content or services.</p>
+        </div>
+        
+        <div class="section">
+            <h2>8. Indemnification</h2>
+            <p>You agree to indemnify, defend, and hold harmless NexCMS, its affiliates, officers, directors, employees, and agents from and against any claims, liabilities, damages, losses, and expenses (including reasonable attorneys' fees) arising out of:</p>
+            <ul>
+                <li>Your use of our website</li>
+                <li>Your violation of these Terms</li>
+                <li>Your violation of any third-party rights</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>9. Modifications to Terms</h2>
+            <p>We reserve the right to modify these Terms at any time. We will notify users of significant changes by:</p>
+            <ul>
+                <li>Updating the "Last Updated" date at the top of this page</li>
+                <li>Posting a notice on our website</li>
+                <li>Or other reasonable means</li>
+            </ul>
+            <p>Your continued use of the website after changes become effective constitutes acceptance of the modified Terms.</p>
+        </div>
+        
+        <div class="section">
+            <h2>10. Termination</h2>
+            <p>We reserve the right to terminate or suspend your access to our website at any time, with or without cause or notice, for any reason, including but not limited to:</p>
+            <ul>
+                <li>Violation of these Terms</li>
+                <li>Fraudulent or harmful activity</li>
+                <li>Requests by law enforcement</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>11. Governing Law</h2>
+            <p>These Terms shall be governed by and construed in accordance with applicable laws, without regard to conflict of law provisions. Any disputes arising from these Terms or your use of our website shall be subject to the exclusive jurisdiction of the courts in the jurisdiction where NexCMS operates.</p>
+        </div>
+        
+        <div class="section">
+            <h2>12. Severability</h2>
+            <p>If any provision of these Terms is found to be unenforceable or invalid, that provision shall be limited or eliminated to the minimum extent necessary, and the remaining provisions shall remain in full force and effect.</p>
+        </div>
+        
+        <div class="section">
+            <h2>13. Contact Information</h2>
+            <p>If you have any questions about these Terms of Service, please contact us:</p>
+            <ul>
+                <li><strong>Website:</strong> <a href="${process.env.SITE_URL || 'http://localhost:3000'}">${process.env.SITE_URL || 'http://localhost:3000'}</a></li>
+                <li><strong>Email:</strong> Contact information available through our website</li>
+            </ul>
+        </div>
+        
+        <div class="highlight-box">
+            <h3>Complete Agreement</h3>
+            <p>These Terms of Service, together with our <a href="/privacy-policy.html">Privacy Policy</a>, constitute the entire agreement between you and NexCMS regarding the use of our website and supersede all prior agreements and understandings.</p>
+        </div>
+    </div>
+    
+    <script>
+        // Cookie Consent Functions
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+        
+        function acceptCookies() {
+            document.cookie = 'cookieConsent=accepted; path=/; max-age=31536000'; // 1 year
+            document.getElementById('cookieConsent').classList.remove('active');
+        }
+        
+        function rejectCookies() {
+            document.cookie = 'cookieConsent=rejected; path=/; max-age=31536000';
+            document.getElementById('cookieConsent').classList.remove('active');
+        }
+        
+        function openCookieSettings() {
+            alert('Cookie settings can be managed through your browser preferences.');
+        }
+        
+        // Show cookie consent if not set
+        if (!getCookie('cookieConsent')) {
+            setTimeout(() => {
+                document.getElementById('cookieConsent').classList.add('active');
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
+

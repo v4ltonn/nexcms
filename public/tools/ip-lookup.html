@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP Address Lookup - Test Website SSL Certificate | NexCMS</title>
+    <meta name="description" content="Free SSL/TLS certificate checker. Verify SSL certificate validity, expiration date, issuer, and security configuration for any website.">
+    <meta name="keywords" content="IP lookup, IP checker, IP geolocation, WHOIS, IP address information, NexCMS">
+    <link rel="canonical" href="${process.env.SITE_URL || 'http://localhost:3000'}/ip-lookup">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5a8f3b2c">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            padding: 15px 0;
+            border-bottom: 2px solid #333;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #00ff88;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 10px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+        .logo i { font-size: 1.6rem; filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.5)); }
+        .hero {
+            text-align: center;
+            padding: 60px 0 40px;
+            background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+        }
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .tool-section {
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 40px;
+            margin: 40px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .url-input {
+            flex: 1;
+            padding: 20px;
+            background: #0a0a0a;
+            border: 2px solid rgba(0, 255, 136, 0.3);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+        .url-input:focus {
+            outline: none;
+            border-color: #00ff88;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+        }
+        .check-btn {
+            padding: 20px 40px;
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .check-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 255, 136, 0.4);
+        }
+        .check-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #00ff88;
+        }
+        .results {
+            margin-top: 30px;
+        }
+        .cert-card {
+            background: #0a0a0a;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .cert-card.valid {
+            border-color: rgba(0, 255, 136, 0.3);
+            background: rgba(0, 255, 136, 0.05);
+        }
+        .cert-card.expired {
+            border-color: rgba(255, 0, 0, 0.3);
+            background: rgba(255, 0, 0, 0.05);
+        }
+        .cert-card.expiring {
+            border-color: rgba(255, 170, 0, 0.3);
+            background: rgba(255, 170, 0, 0.05);
+        }
+        .cert-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .cert-item:last-child {
+            border-bottom: none;
+        }
+        .cert-label {
+            color: #888;
+            font-weight: 600;
+        }
+        .cert-value {
+            color: #ffffff;
+            font-weight: 500;
+            text-align: right;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .status-valid {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            border: 1px solid #00ff88;
+        }
+        .status-expired {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff0000;
+            border: 1px solid #ff0000;
+        }
+        .status-expiring {
+            background: rgba(255, 170, 0, 0.2);
+            color: #ffaa00;
+            border: 1px solid #ffaa00;
+        }
+        .rate-limit-warning {
+            background: rgba(255, 170, 0, 0.1);
+            border: 1px solid rgba(255, 170, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #ffaa00;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .input-group { flex-direction: column; }
+            .tool-section { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="/" class="logo"><i class="fas fa-shield-alt"></i><span>NexCMS</span></a>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container">
+        <section class="hero">
+            <h1><i class="fas fa-map-marker-alt"></i> IP Address Lookup</h1>
+            <p>Verify Get IP address geolocation, ISP, and network information</p>
+        </section>
+        
+        <section class="tool-section">
+            <div class="rate-limit-warning">
+                <i class="fas fa-info-circle"></i> Rate limit: 5 checks per 10 minutes per IP address
+            </div>
+            
+            <div class="input-group">
+                <input type="text" 
+                       id="domainInput" 
+                       class="url-input" 
+                       placeholder="example.com or https://example.com"
+                       value="">
+                <button class="check-btn" onclick="processiplookup()">
+                    <i class="fas fa-search"></i> Check Certificate
+                </button>
+            </div>
+            
+            <div id="loadingIndicator" class="loading" style="display: none;">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Checking SSL certificate...</p>
+            </div>
+            
+            <div id="resultsContainer" class="results"></div>
+        </section>
+    </div>
+    
+    <script>
+        async function processiplookup() {
+            const domain = document.getElementById('domainInput').value.trim();
+            if (!domain) {
+                alert('Please enter a domain name');
+                return;
+            }
+            
+            const loading = document.getElementById('loadingIndicator');
+            const results = document.getElementById('resultsContainer');
+            const checkBtn = document.querySelector('.check-btn');
+            
+            loading.style.display = 'block';
+            results.innerHTML = '';
+            checkBtn.disabled = true;
+            
+            try {
+                const response = await fetch(`/api/tools/ip-lookup?domain=${encodeURIComponent(domain)}`);
+                const data = await response.json();
+                
+                loading.style.display = 'none';
+                checkBtn.disabled = false;
+                
+                if (data.success) {
+                    const cert = data.certificate;
+                    let statusClass = 'valid';
+                    let statusText = 'Valid';
+                    let statusBadge = 'status-valid';
+                    
+                    if (cert.isExpired) {
+                        statusClass = 'expired';
+                        statusText = 'Expired';
+                        statusBadge = 'status-expired';
+                    } else if (cert.isExpiringSoon) {
+                        statusClass = 'expiring';
+                        statusText = 'Expiring Soon';
+                        statusBadge = 'status-expiring';
+                    }
+                    
+                    results.innerHTML = `
+                        <div class="cert-card ${statusClass}">
+                            <div class="status-badge ${statusBadge}">
+                                <i class="fas ${cert.isExpired ? 'fa-times-circle' : cert.isExpiringSoon ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i>
+                                ${statusText}
+                            </div>
+                            <div class="cert-item">
+                                <span class="cert-label">Domain:</span>
+                                <span class="cert-value">${data.domain}</span>
+                            </div>
+                            <div class="cert-item">
+                                <span class="cert-label">Issuer:</span>
+                                <span class="cert-value">${cert.issuer}</span>
+                            </div>
+                            <div class="cert-item">
+                                <span class="cert-label">Subject:</span>
+                                <span class="cert-value">${cert.subject}</span>
+                            </div>
+                            <div class="cert-item">
+                                <span class="cert-label">Valid From:</span>
+                                <span class="cert-value">${new Date(cert.validFrom).toLocaleString()}</span>
+                            </div>
+                            <div class="cert-item">
+                                <span class="cert-label">Valid To:</span>
+                                <span class="cert-value">${new Date(cert.validTo).toLocaleString()}</span>
+                            </div>
+                            <div class="cert-item">
+                                <span class="cert-label">Days Until Expiry:</span>
+                                <span class="cert-value">${cert.daysUntilExpiry} days</span>
+                            </div>
+                            <div class="cert-item">
+                                <span class="cert-label">Serial Number:</span>
+                                <span class="cert-value" style="font-family: monospace; font-size: 0.9rem;">${cert.serialNumber}</span>
+                            </div>
+                            <div class="cert-item">
+                                <span class="cert-label">Fingerprint:</span>
+                                <span class="cert-value" style="font-family: monospace; font-size: 0.85rem;">${cert.fingerprint}</span>
+                            </div>
+                            <div class="cert-item">
+                                <span class="cert-label">Algorithm:</span>
+                                <span class="cert-value">${cert.algorithm}</span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    results.innerHTML = `<div style="text-align: center; color: #ff0000; padding: 40px;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 20px;"></i>
+                        <p>Error: ${data.error || 'Failed to check certificate'}</p>
+                        ${data.retryAfter ? `<p style="color: #888; margin-top: 10px;">Please wait ${Math.ceil(data.retryAfter / 60)} minutes before trying again.</p>` : ''}
+                    </div>`;
+                }
+            } catch (error) {
+                loading.style.display = 'none';
+                checkBtn.disabled = false;
+                results.innerHTML = `<div style="text-align: center; color: #ff0000; padding: 40px;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 20px;"></i>
+                    <p>Error: ${error.message}</p>
+                </div>`;
+            }
+        }
+        
+        document.getElementById('domainInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                processiplookup();
+            }
+        });
+    </script>
+</body>
+</html>
+

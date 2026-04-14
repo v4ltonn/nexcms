@@ -1,0 +1,27 @@
+User-agent: *
+Allow: /
+
+User-agent: AdsBot-Google
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+# Sitemaps
+Sitemap: ${process.env.SITE_URL || 'http://localhost:3000'}/sitemap.xml
+Sitemap: ${process.env.SITE_URL || 'http://localhost:3000'}/sitemap-index.xml
+Sitemap: ${process.env.SITE_URL || 'http://localhost:3000'}/sitemap-posts.xml
+Sitemap: ${process.env.SITE_URL || 'http://localhost:3000'}/sitemap-categories.xml
+
+# Allow all crawlers to access content and API
+Allow: /posts/
+Allow: /category/
+Allow: /css/
+Allow: /js/
+Allow: /favicon.ico
+Allow: /uploads/
+Allow: /api/posts/
+
+# Only disallow admin areas
+Disallow: /admin/
+Disallow: /api/admin/

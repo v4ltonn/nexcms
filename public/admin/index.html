@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexCMS Admin</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5a8f3b2c">
+    <link rel="apple-touch-icon" href="/favicon.svg?v=5a8f3b2c">
+    <meta name="theme-color" content="#0a0a0a">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css?v=1">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Quill Rich Text Editor (self-hosted to avoid CSP issues) -->
+    <link href="/admin/vendor/quill/quill.snow.css?v=1.3.7" rel="stylesheet">
+    <script src="/admin/vendor/quill/quill.min.js?v=1.3.7"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: #111111;
+            border-right: 1px solid #333;
+            padding: 20px 0;
+        }
+        
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid #333;
+            margin-bottom: 20px;
+        }
+        
+        .sidebar-header h2 {
+            color: #00ff88;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .sidebar-nav {
+            list-style: none;
+        }
+        
+        .sidebar-nav li {
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-nav a {
+            display: block;
+            padding: 12px 20px;
+            color: #ffffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+            background: #1a1a1a;
+            border-left-color: #00ff88;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            background: #0a0a0a;
+        }
+        
+        .page-header {
+            margin-bottom: 30px;
+        }
+        
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #00ff88;
+        }
+        
+        .page-subtitle {
+            color: #888;
+            font-size: 1rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: #111111;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00ff88;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        .content-section {
+            background: #111111;
+            border-radius: 8px;
+            border: 1px solid #333;
+            overflow: hidden;
+        }
+        
+        .section-header {
+            padding: 20px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #00ff88;
+            color: #000;
+        }
+        
+        .btn-primary:hover {
+            background: #00cc6a;
+        }
+        
+        .btn-secondary {
+            background: #333;
+            color: #ffffff;
+        }
+        
+        .btn-secondary:hover {
+            background: #444;
+        }
+        
+        .btn-danger {
+            background: #ff4444;
+            color: #ffffff;
+        }
+        
+        .btn-danger:hover {
+            background: #cc3333;
+        }
+        
+        .posts-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .posts-table th,
+        .posts-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        
+        .posts-table th {
+            background: #1a1a1a;
+            font-weight: 600;
+        }
+        
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-published {
+            background: #00ff88;
+            color: #000;
+        }
+        
+        .status-draft {
+            background: #ffaa00;
+            color: #000;
+        }
+        
+        .status-admin {
+            background: #00ff88;
+            color: #000;
+        }
+        
+        .status-user {
+            background: #333;
+            color: #ffffff;
+        }
+        
+        .loading {
+            padding: 20px;
+            text-align: center;
+            color: #888;
+        }
+        
+        .error {
+            padding: 20px;
+            text-align: center;
+            color: #ff4444;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            background: #1a1a1a;
+            color: #ffffff;
+            font-size: 0.9rem;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #00ff88;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .simple-form {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .edit-form {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 2px solid #00ff88;
+        }
+        
+        .edit-form h3 {
+            color: #00ff88;
+            margin-bottom: 15px;
+        }
+        /* Toast notifications (WordPress-style) */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: 360px;
+        }
+        .toast {
+            padding: 14px 18px;
+            border-radius: 6px;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: toastIn 0.25s ease;
+        }
+        .toast.success { background: #0d3320; border-left: 4px solid #00ff88; color: #e0e0e0; }
+        .toast.error { background: #2a1515; border-left: 4px solid #ff4444; color: #e0e0e0; }
+        .toast a { color: #00ff88; text-decoration: none; font-weight: 500; }
+        .toast a:hover { text-decoration: underline; }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .permalink-display { font-size: 13px; color: #888; margin-top: 4px; }
+        .permalink-display a { color: #00ff88; }
+        .btn-add-new { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+    <div class="admin-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>NexCMS Admin</h2>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="#" class="nav-link active" data-page="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="#" class="nav-link" data-page="posts"><i class="fas fa-newspaper"></i> Posts</a></li>
+                <li><a href="#" class="nav-link" data-page="categories"><i class="fas fa-th-large"></i> Categories</a></li>
+                <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </div>
+        
+        <div class="main-content">
+            <!-- Dashboard Page -->
+            <div id="dashboard-page" class="page">
+                <div class="page-header">
+                    <h1 class="page-title">Dashboard</h1>
+                    <p class="page-subtitle">Welcome to NexCMS Admin Panel</p>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-posts">-</div>
+                        <div class="stat-label">Total Posts</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-categories">-</div>
+                        <div class="stat-label">Categories</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-views">-</div>
+                        <div class="stat-label">Total Views</div>
+                    </div>
+                </div>
+                
+                <div class="content-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Recent Posts</h2>
+                    </div>
+                    <div id="recent-posts" class="loading">Loading recent posts...</div>
+                </div>
+            </div>
+            
+            <!-- Posts Page -->
+            <div id="posts-page" class="page hidden">
+                <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 15px;">
+                    <div>
+                        <h1 class="page-title">Posts</h1>
+                        <p class="page-subtitle">Manage your blog posts</p>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-add-new" id="btn-add-new-post" onclick="toggleQuickCreate()">
+                        <i class="fas fa-plus"></i> Add New Post
+                    </button>
+                </div>
+
+                <!-- Edit Post Form (Hidden by default) -->
+                <div id="edit-post-form" class="edit-form hidden">
+                    <h3>Edit Post</h3>
+                    <form id="edit-form">
+                        <input type="hidden" id="edit-post-id">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="edit-title">Title</label>
+                                <input type="text" id="edit-title" required>
+                                <div id="edit-permalink" class="permalink-display hidden"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-category">Category</label>
+                                <select id="edit-category" required>
+                                    <option value="">Select Category</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 2;">
+                                <label for="edit-slug">Slug (URL)</label>
+                                <input type="text" id="edit-slug" placeholder="auto-from-title">
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label for="edit-status">Status</label>
+                                <select id="edit-status">
+                                    <option value="draft">Draft</option>
+                                    <option value="published">Published</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-excerpt">Excerpt (SEO / listings)</label>
+                            <textarea id="edit-excerpt" rows="2" placeholder="Short summary..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-content">Content</label>
+                            <div id="edit-content" style="min-height: 300px; background: #1a1a1a; border-radius: 4px;"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="edit-thumbnail">Thumbnail URL</label>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="url" id="edit-thumbnail" placeholder="https://example.com/image.jpg" style="flex: 1;">
+                                    <button type="button" class="btn btn-secondary" onclick="uploadThumbnail('edit')" style="padding: 8px 15px; white-space: nowrap;">
+                                        <i class="fas fa-upload"></i> Upload
+                                    </button>
+                                </div>
+                                <input type="file" id="edit-thumbnail-file" accept="image/*,image/gif" style="display: none;" onchange="handleThumbnailUpload('edit', this.files[0])">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" id="edit-featured" style="width: auto; cursor: pointer;">
+                                <label for="edit-featured" style="margin: 0; cursor: pointer; font-weight: 500; color: #00ff88;">
+                                    <i class="fas fa-star"></i> Featured Post
+                                </label>
+                            </div>
+                            <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" id="edit-trending" style="width: auto; cursor: pointer;">
+                                <label for="edit-trending" style="margin: 0; cursor: pointer; font-weight: 500; color: #00ff88;">
+                                    <i class="fas fa-fire"></i> Trending Post
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="cancelEdit()">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Update Post</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="content-section">
+                    <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <h2 class="section-title">All Posts</h2>
+                        <input type="text" id="posts-search" placeholder="Search posts..." style="padding: 8px 12px; max-width: 260px; border-radius: 4px; border: 1px solid #333; background: #1a1a1a; color: #fff;">
+                    </div>
+                    <div id="posts-list" class="loading">Loading posts...</div>
+                </div>
+
+                <!-- Quick Create Post Form (collapsible) -->
+                <div class="simple-form hidden" id="quick-create-form">
+                    <h3 style="margin-bottom: 15px; color: #00ff88;"><i class="fas fa-plus"></i> Add New Post</h3>
+                    <form id="quick-post-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="quick-title">Title</label>
+                                <input type="text" id="quick-title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="quick-category">Category</label>
+                                <select id="quick-category" required>
+                                    <option value="">Select Category</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 2;">
+                                <label for="quick-slug">Slug (optional, auto from title)</label>
+                                <input type="text" id="quick-slug" placeholder="leave blank to auto-generate">
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label for="quick-status">Status</label>
+                                <select id="quick-status">
+                                    <option value="draft">Draft</option>
+                                    <option value="published">Published</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="quick-excerpt">Excerpt (optional)</label>
+                            <textarea id="quick-excerpt" rows="2" placeholder="Short summary for SEO and listings"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="quick-content">Content</label>
+                            <div id="quick-content" style="min-height: 200px; background: #1a1a1a; border-radius: 4px;"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="quick-thumbnail">Thumbnail URL</label>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="url" id="quick-thumbnail" placeholder="https://example.com/image.jpg" style="flex: 1;">
+                                    <button type="button" class="btn btn-secondary" onclick="uploadThumbnail('quick')" style="padding: 8px 15px; white-space: nowrap;">
+                                        <i class="fas fa-upload"></i> Upload
+                                    </button>
+                                </div>
+                                <input type="file" id="quick-thumbnail-file" accept="image/*,image/gif" style="display: none;" onchange="handleThumbnailUpload('quick', this.files[0])">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" id="quick-featured" style="width: auto; cursor: pointer;">
+                                <label for="quick-featured" style="margin: 0; cursor: pointer; font-weight: 500; color: #00ff88;">
+                                    <i class="fas fa-star"></i> Featured Post
+                                </label>
+                            </div>
+                            <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" id="quick-trending" style="width: auto; cursor: pointer;">
+                                <label for="quick-trending" style="margin: 0; cursor: pointer; font-weight: 500; color: #00ff88;">
+                                    <i class="fas fa-fire"></i> Trending Post
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Create Post</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Categories Page -->
+            <div id="categories-page" class="page hidden">
+                <div class="page-header">
+                    <h1 class="page-title">Categories</h1>
+                    <p class="page-subtitle">Manage content categories</p>
+                </div>
+                
+                <!-- Quick Create Category Form -->
+                <div class="simple-form">
+                    <h3 style="margin-bottom: 15px; color: #00ff88;">Quick Create Category</h3>
+                    <form id="quick-category-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="quick-cat-name">Name</label>
+                                <input type="text" id="quick-cat-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="quick-cat-color">Color</label>
+                                <input type="color" id="quick-cat-color" value="#00ff88">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="quick-cat-description">Description</label>
+                            <textarea id="quick-cat-description" rows="2"></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Create Category</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="content-section">
+                    <div class="section-header">
+                        <h2 class="section-title">All Categories</h2>
+                    </div>
+                    <div id="categories-list" class="loading">Loading categories...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Authentication check
+        function checkAuth() {
+            const token = localStorage.getItem('adminToken');
+            if (!token) {
+                window.location.href = '/admin/login.html';
+                return false;
+            }
+            return true;
+        }
+        
+        // Logout function
+        function logout() {
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminUser');
+            window.location.href = '/admin/login.html';
+        }
+        
+        function escapeHtml(s) {
+            if (s == null || s === '') return '';
+            const d = document.createElement('div');
+            d.textContent = s;
+            return d.innerHTML;
+        }
+
+        // Get auth headers
+        function getAuthHeaders() {
+            const token = localStorage.getItem('adminToken');
+            return {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            };
+        }
+
+        // Toast notifications (WordPress-style)
+        function showToast(message, type = 'success', viewPostUrl = null) {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = 'toast ' + type;
+            let html = message;
+            if (viewPostUrl) {
+                html += ' <a href="' + viewPostUrl + '" target="_blank" rel="noopener">View post <i class="fas fa-external-link-alt" style="font-size: 11px;"></i></a>';
+            }
+            toast.innerHTML = html;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, type === 'error' ? 6000 : 4000);
+        }
+
+        function toggleQuickCreate() {
+            const form = document.getElementById('quick-create-form');
+            const btn = document.getElementById('btn-add-new-post');
+            if (form.classList.contains('hidden')) {
+                form.classList.remove('hidden');
+                form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                btn.innerHTML = '<i class="fas fa-minus"></i> Cancel';
+            } else {
+                form.classList.add('hidden');
+                btn.innerHTML = '<i class="fas fa-plus"></i> Add New Post';
+            }
+        }
+        
+        // Navigation
+        function initNavigation() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = link.dataset.page;
+                    if (page) {
+                        showPage(page);
+                    }
+                });
+            });
+        }
+        
+        function showPage(pageName) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.add('hidden'));
+            
+            // Show selected page
+            const targetPage = document.getElementById(`${pageName}-page`);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+            }
+            
+            // Update active nav link
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.page === pageName) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Load page data
+            switch(pageName) {
+                case 'dashboard':
+                    loadDashboard();
+                    break;
+                case 'posts':
+                    document.getElementById('quick-create-form').classList.add('hidden');
+                    const addBtn = document.getElementById('btn-add-new-post');
+                    if (addBtn) addBtn.innerHTML = '<i class="fas fa-plus"></i> Add New Post';
+                    loadPosts();
+                    loadCategoriesForSelect();
+                    break;
+                case 'categories':
+                    loadCategories();
+                    break;
+            }
+        }
+        
+        // Dashboard functions
+        async function loadDashboard() {
+            try {
+                const [postsRes, categoriesRes] = await Promise.all([
+                    fetch('/api/posts', { headers: getAuthHeaders() }),
+                    fetch('/api/categories', { headers: getAuthHeaders() })
+                ]);
+                
+                const postsData = await postsRes.json();
+                const categories = await categoriesRes.json();
+                
+                const posts = postsData.posts || postsData;
+                
+                // Update stats
+                document.getElementById('total-posts').textContent = posts.length;
+                document.getElementById('total-categories').textContent = categories.length;
+                
+                // Calculate total views
+                const totalViews = posts.reduce((sum, post) => sum + (post.views || 0), 0);
+                document.getElementById('total-views').textContent = totalViews;
+                
+                // Load recent posts (show up to 20; link to Posts for full list)
+                loadRecentPosts(posts.slice(0, 20), posts.length);
+                
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                if (error.message.includes('401') || error.message.includes('403')) {
+                    logout();
+                }
+            }
+        }
+        
+        function loadRecentPosts(posts, totalCount) {
+            const container = document.getElementById('recent-posts');
+            if (!posts || posts.length === 0) {
+                container.innerHTML = '<p>No posts found.</p>';
+                return;
+            }
+            const total = totalCount != null ? totalCount : posts.length;
+            const viewAllLabel = total > posts.length ? `View all ${total} posts` : 'View all posts';
+            const viewAllHtml = `<p style="margin-top: 12px; color: #888;"><a href="#" onclick="showPage('posts'); return false;" style="color: #00ff88;">${viewAllLabel} &rarr;</a></p>`;
+            container.innerHTML = `
+                <table class="posts-table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Featured</th>
+                            <th>Trending</th>
+                            <th>Views</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${posts.map(post => `
+                            <tr>
+                                <td>${post.title}</td>
+                                <td>${post.category?.name || 'Uncategorized'}</td>
+                                <td><span class="status-badge status-${post.status}">${post.status}</span></td>
+                                <td>${post.featured ? '<span style="color: #00ff88;"><i class="fas fa-star"></i> Yes</span>' : '<span style="color: #666;">No</span>'}</td>
+                                <td>${post.trending ? '<span style="color: #ff6b00;"><i class="fas fa-fire"></i> Yes</span>' : '<span style="color: #666;">No</span>'}</td>
+                                <td>${post.views || 0}</td>
+                                <td>${new Date(post.createdAt).toLocaleDateString()}</td>
+                                <td>
+                                    <a href="' + window.location.origin + '/posts/${post.slug || post._id}" target="_blank" rel="noopener" class="btn btn-secondary" style="text-decoration: none; margin-right: 6px;"><i class="fas fa-external-link-alt"></i> View</a>
+                                    <button class="btn btn-secondary" onclick="editPost('${post._id}')">Edit</button>
+                                    <button class="btn btn-danger" onclick="deletePost('${post._id}')">Delete</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+                ${viewAllHtml}
+            `;
+        }
+        
+        // Posts functions - with pagination
+        let currentPage = 1;
+        const postsPerPage = 10;
+        let totalPages = 1;
+        let totalPosts = 0;
+
+        async function loadPosts(page = 1) {
+            try {
+                currentPage = page;
+                const response = await fetch(`/api/posts?page=${page}&limit=${postsPerPage}&status=all`, { headers: getAuthHeaders() });
+                const data = await response.json();
+                const posts = data.posts || data;
+                
+                // Get pagination info
+                totalPosts = data.total || posts.length;
+                totalPages = data.totalPages || Math.ceil(totalPosts / postsPerPage) || 1;
+                
+                const container = document.getElementById('posts-list');
+                if (!posts || posts.length === 0) {
+                    container.innerHTML = '<p>No posts found.</p>';
+                    updatePaginationControls();
+                    return;
+                }
+                
+                container.innerHTML = `
+                    <table class="posts-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Featured</th>
+                                <th>Trending</th>
+                                <th>Views</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${posts.map(post => {
+                                const searchText = ((post.title || '') + ' ' + (post.category?.name || '') + ' ' + (post.slug || '')).toLowerCase();
+                                return `
+                                <tr data-search="${escapeHtml(searchText)}">
+                                    <td>${escapeHtml(post.title)}</td>
+                                    <td>${escapeHtml(post.category?.name || 'Uncategorized')}</td>
+                                    <td><span class="status-badge status-${post.status}">${post.status}</span></td>
+                                    <td>${post.featured ? '<span style="color: #00ff88;"><i class="fas fa-star"></i> Yes</span>' : '<span style="color: #666;">No</span>'}</td>
+                                    <td>${post.trending ? '<span style="color: #ff6b00;"><i class="fas fa-fire"></i> Yes</span>' : '<span style="color: #666;">No</span>'}</td>
+                                    <td>${post.views || 0}</td>
+                                    <td>${new Date(post.createdAt).toLocaleDateString()}</td>
+                                    <td>
+                                        <a href="' + window.location.origin + '/posts/${post.slug || post._id}" target="_blank" rel="noopener" class="btn btn-secondary" style="text-decoration: none; margin-right: 6px;"><i class="fas fa-external-link-alt"></i> View</a>
+                                        <button class="btn btn-secondary" onclick="editPost('${post._id}')">Edit</button>
+                                        <button class="btn btn-danger" onclick="deletePost('${post._id}')">Delete</button>
+                                    </td>
+                                </tr>
+                            `}).join('')}
+                    </tbody>
+                </table>
+                    <div id="pagination-controls" style="margin-top: 20px; display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap;"></div>
+                `;
+                
+                updatePaginationControls();
+                
+            } catch (error) {
+                console.error('Error loading posts:', error);
+                document.getElementById('posts-list').innerHTML = '<div class="error">Error loading posts</div>';
+            }
+        }
+
+        function updatePaginationControls() {
+            const controlsContainer = document.getElementById('pagination-controls');
+            if (!controlsContainer) return;
+
+            if (totalPages <= 1) {
+                controlsContainer.innerHTML = `<span style="color: #888;">Showing ${totalPosts} posts</span>`;
+                return;
+            }
+
+            const controls = [];
+            
+            // Previous button
+            controls.push(`
+                <button class="btn btn-secondary" onclick="loadPosts(${currentPage - 1})" ${currentPage === 1 ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
+                    <i class="fas fa-chevron-left"></i> Previous
+                </button>
+            `);
+
+            // Page numbers
+            const maxPagesToShow = 7;
+            let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+            let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+            
+            if (endPage - startPage < maxPagesToShow - 1) {
+                startPage = Math.max(1, endPage - maxPagesToShow + 1);
+            }
+
+            if (startPage > 1) {
+                controls.push(`<button class="btn btn-secondary" onclick="loadPosts(1)">1</button>`);
+                if (startPage > 2) {
+                    controls.push(`<span style="color: #888; padding: 0 5px;">...</span>`);
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                controls.push(`
+                    <button class="btn ${i === currentPage ? 'btn-primary' : 'btn-secondary'}" onclick="loadPosts(${i})" style="min-width: 40px;">
+                        ${i}
+                    </button>
+                `);
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    controls.push(`<span style="color: #888; padding: 0 5px;">...</span>`);
+                }
+                controls.push(`<button class="btn btn-secondary" onclick="loadPosts(${totalPages})">${totalPages}</button>`);
+            }
+
+            // Next button
+            controls.push(`
+                <button class="btn btn-secondary" onclick="loadPosts(${currentPage + 1})" ${currentPage === totalPages ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+            `);
+
+            controlsContainer.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                    ${controls.join('')}
+                </div>
+                <div style="margin-top: 10px; color: #888; font-size: 14px; text-align: center; width: 100%;">
+                    Showing page ${currentPage} of ${totalPages} (${totalPosts} total posts)
+                </div>
+            `;
+        }
+        
+        // Categories functions
+        async function loadCategories() {
+            try {
+                const response = await fetch('/api/categories', { headers: getAuthHeaders() });
+                const categories = await response.json();
+                
+                const container = document.getElementById('categories-list');
+                if (!categories || categories.length === 0) {
+                    container.innerHTML = '<p>No categories found.</p>';
+                    return;
+                }
+                
+                container.innerHTML = `
+                    <table class="posts-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Posts</th>
+                                <th>Color</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${categories.map(category => `
+                                <tr>
+                                    <td>${category.name}</td>
+                                    <td>${category.description}</td>
+                                    <td>${category.postCount || 0}</td>
+                                    <td><span style="display: inline-block; width: 20px; height: 20px; background: ${category.color}; border-radius: 3px;"></span></td>
+                                    <td>
+                                        <button class="btn btn-danger" onclick="deleteCategory('${category._id}')">Delete</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                
+            } catch (error) {
+                console.error('Error loading categories:', error);
+                document.getElementById('categories-list').innerHTML = '<div class="error">Error loading categories</div>';
+            }
+        }
+        
+        async function loadCategoriesForSelect() {
+            try {
+                const response = await fetch('/api/categories', { headers: getAuthHeaders() });
+                const categories = await response.json();
+                
+                const select = document.getElementById('quick-category');
+                const editSelect = document.getElementById('edit-category');
+                
+                const options = '<option value="">Select Category</option>' + 
+                    categories.map(category => `<option value="${category._id}">${category.name}</option>`).join('');
+                
+                if (select) select.innerHTML = options;
+                if (editSelect) editSelect.innerHTML = options;
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        }
+        
+        // Edit Post Function
+        async function editPost(postId) {
+            try {
+                console.log('Loading post for editing:', postId);
+                const response = await fetch(`/api/posts/${postId}`, { headers: getAuthHeaders() });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch post');
+                }
+                
+                const post = await response.json();
+                console.log('Post loaded:', post);
+                
+                // Populate edit form
+                document.getElementById('edit-post-id').value = post._id;
+                document.getElementById('edit-title').value = post.title;
+                const slugEl = document.getElementById('edit-slug');
+                if (slugEl) slugEl.value = post.slug || '';
+                const excerptEl = document.getElementById('edit-excerpt');
+                if (excerptEl) excerptEl.value = post.excerpt || '';
+                const permalinkEl = document.getElementById('edit-permalink');
+                if (permalinkEl) {
+                    const slug = post.slug || post._id;
+                    const url = '' + window.location.origin + '/posts/' + slug;
+                    permalinkEl.innerHTML = '<a href="' + url + '" target="_blank" rel="noopener">' + url + ' <i class="fas fa-external-link-alt" style="font-size: 11px;"></i></a>';
+                    permalinkEl.classList.remove('hidden');
+                }
+                if (editQuill) {
+                    editQuill.root.innerHTML = post.contentHtml || post.content || '';
+                } else {
+                    document.getElementById('edit-content').value = post.content || '';
+                }
+                document.getElementById('edit-status').value = post.status;
+                document.getElementById('edit-featured').checked = post.featured || false;
+                document.getElementById('edit-trending').checked = post.trending || false;
+
+                if (post.thumbnail && post.thumbnail.url) {
+                    document.getElementById('edit-thumbnail').value = post.thumbnail.url;
+                }
+
+                // Load categories and set selected
+                await loadCategoriesForSelect();
+                if (post.category) {
+                    document.getElementById('edit-category').value = post.category._id;
+                }
+                
+                // Show edit form
+                document.getElementById('edit-post-form').classList.remove('hidden');
+                
+                // Scroll to edit form
+                document.getElementById('edit-post-form').scrollIntoView({ behavior: 'smooth' });
+                
+            } catch (error) {
+                console.error('Error loading post for editing:', error);
+                showToast('Error loading post: ' + error.message, 'error');
+            }
+        }
+
+        function cancelEdit() {
+            document.getElementById('edit-post-form').classList.add('hidden');
+            document.getElementById('edit-form').reset();
+            const permalinkEl = document.getElementById('edit-permalink');
+            if (permalinkEl) { permalinkEl.innerHTML = ''; permalinkEl.classList.add('hidden'); }
+        }
+        
+        // Form submissions
+        document.getElementById('edit-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const postId = document.getElementById('edit-post-id').value;
+            // Process images to ensure they're mobile-responsive
+            let editContentHtml = editQuill ? editQuill.root.innerHTML : document.getElementById('edit-content').value;
+            editContentHtml = processImagesForMobile(editContentHtml);
+            
+            const formData = {
+                title: document.getElementById('edit-title').value,
+                content: editQuill ? editQuill.root.textContent : document.getElementById('edit-content').value,
+                contentHtml: editContentHtml,
+                category: document.getElementById('edit-category').value,
+                status: document.getElementById('edit-status').value,
+                excerpt: document.getElementById('edit-excerpt').value.trim() || undefined,
+                slug: document.getElementById('edit-slug').value.trim() || undefined,
+                featured: document.getElementById('edit-featured').checked,
+                trending: document.getElementById('edit-trending').checked
+            };
+
+            // Add thumbnail if provided
+            const thumbnailUrl = document.getElementById('edit-thumbnail').value;
+            if (thumbnailUrl) {
+                formData.thumbnail = {
+                    url: thumbnailUrl,
+                    alt: formData.title
+                };
+            }
+            
+            try {
+                const response = await fetch(`/api/posts/${postId}`, {
+                    method: 'PUT',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(formData)
+                });
+                
+                if (response.ok) {
+                    const updated = await response.json();
+                    const viewUrl = '' + window.location.origin + '/posts/' + (updated.slug || postId);
+                    showToast('Post updated.', 'success', viewUrl);
+                    cancelEdit();
+                    loadPosts();
+                    loadDashboard();
+                } else {
+                    const error = await response.json();
+                    showToast('Error: ' + (error.message || 'Update failed'), 'error');
+                }
+            } catch (error) {
+                console.error('Error updating post:', error);
+                showToast('Error updating post', 'error');
+            }
+        });
+
+        document.getElementById('quick-post-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const content = quickQuill ? quickQuill.root.textContent : document.getElementById('quick-content').value;
+            let quickContentHtml = quickQuill ? quickQuill.root.innerHTML : '';
+            quickContentHtml = processImagesForMobile(quickContentHtml);
+            const quickExcerpt = document.getElementById('quick-excerpt').value.trim();
+            const quickSlug = document.getElementById('quick-slug').value.trim();
+
+            const formData = {
+                title: document.getElementById('quick-title').value,
+                content: content,
+                contentHtml: quickContentHtml,
+                category: document.getElementById('quick-category').value,
+                status: document.getElementById('quick-status').value,
+                excerpt: quickExcerpt || (content ? content.substring(0, 150) + '...' : ''),
+                slug: quickSlug || undefined,
+                featured: document.getElementById('quick-featured').checked,
+                trending: document.getElementById('quick-trending').checked
+            };
+
+            const thumbnailUrl = document.getElementById('quick-thumbnail').value;
+            if (thumbnailUrl) {
+                formData.thumbnail = { url: thumbnailUrl, alt: formData.title };
+            }
+
+            try {
+                const response = await fetch('/api/posts', {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    const created = await response.json();
+                    const viewUrl = '' + window.location.origin + '/posts/' + (created.slug || created._id);
+                    showToast('Post created.', 'success', viewUrl);
+                    document.getElementById('quick-post-form').reset();
+                    if (quickQuill) quickQuill.setText('');
+                    document.getElementById('quick-create-form').classList.add('hidden');
+                    const btn = document.getElementById('btn-add-new-post');
+                    if (btn) btn.innerHTML = '<i class="fas fa-plus"></i> Add New Post';
+                    loadPosts();
+                    loadDashboard();
+                } else {
+                    const error = await response.json();
+                    showToast('Error: ' + (error.message || 'Create failed'), 'error');
+                }
+            } catch (error) {
+                console.error('Error creating post:', error);
+                showToast('Error creating post', 'error');
+            }
+        });
+        
+        document.getElementById('quick-category-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('quick-cat-name').value,
+                description: document.getElementById('quick-cat-description').value,
+                color: document.getElementById('quick-cat-color').value,
+                icon: 'fas fa-folder'
+            };
+            
+            try {
+                const response = await fetch('/api/categories', {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(formData)
+                });
+                
+                if (response.ok) {
+                    showToast('Category created.');
+                    document.getElementById('quick-category-form').reset();
+                    loadCategories();
+                    loadDashboard();
+                } else {
+                    const error = await response.json();
+                    showToast('Error: ' + (error.message || 'Create failed'), 'error');
+                }
+            } catch (error) {
+                console.error('Error creating category:', error);
+                showToast('Error creating category', 'error');
+            }
+        });
+        
+        // Action functions
+        async function deletePost(id) {
+            if (confirm('Are you sure you want to delete this post?')) {
+                try {
+                    const response = await fetch(`/api/posts/${id}`, {
+                        method: 'DELETE',
+                        headers: getAuthHeaders()
+                    });
+                    
+                    if (response.ok) {
+                        showToast('Post deleted.');
+                        loadPosts();
+                        loadDashboard();
+                    } else {
+                        showToast('Error deleting post', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error deleting post:', error);
+                    showToast('Error deleting post', 'error');
+                }
+            }
+        }
+        
+        async function deleteCategory(id) {
+            if (confirm('Are you sure you want to delete this category?')) {
+                try {
+                    const response = await fetch(`/api/categories/${id}`, {
+                        method: 'DELETE',
+                        headers: getAuthHeaders()
+                    });
+                    
+                    if (response.ok) {
+                        showToast('Category deleted.');
+                        loadCategories();
+                        loadDashboard();
+                    } else {
+                        showToast('Error deleting category', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error deleting category:', error);
+                    showToast('Error deleting category', 'error');
+                }
+            }
+        }
+        
+        // Upload functions
+        function uploadThumbnail(formType) {
+            document.getElementById(`${formType}-thumbnail-file`).click();
+        }
+        
+        async function handleThumbnailUpload(formType, file) {
+            if (!file) return;
+            
+            // Validate file type
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+            if (!allowedTypes.includes(file.type)) {
+                showToast('Only image files (JPEG, PNG, GIF, WebP) are allowed.', 'error');
+                return;
+            }
+            
+            // Validate file size (10MB max)
+            if (file.size > 10 * 1024 * 1024) {
+                showToast('File size must be less than 10MB.', 'error');
+                return;
+            }
+            
+            let uploadBtn;
+            let originalText = '<i class="fas fa-upload"></i> Upload';
+            
+            try {
+                // Show loading state
+                uploadBtn = document.querySelector(`#${formType}-thumbnail`).parentElement.querySelector('button');
+                if (uploadBtn) {
+                    originalText = uploadBtn.innerHTML;
+                    uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+                    uploadBtn.disabled = true;
+                }
+                
+                // Create form data
+                const formData = new FormData();
+                formData.append('image', file);
+                
+                // Upload to server
+                const headers = getAuthHeaders();
+                delete headers['Content-Type']; // Let browser set Content-Type for FormData
+                
+                const response = await fetch('/api/upload/single', {
+                    method: 'POST',
+                    headers: headers,
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    // Fill the URL input with the uploaded file path
+                    document.getElementById(`${formType}-thumbnail`).value = data.file.path;
+                    showToast('Image uploaded.');
+                } else {
+                    const errorText = await response.text();
+                    console.error('Upload failed:', response.status, errorText);
+                    showToast('Error uploading image. Status: ' + response.status, 'error');
+                }
+                
+                // Restore button
+                if (uploadBtn) {
+                    uploadBtn.innerHTML = originalText;
+                    uploadBtn.disabled = false;
+                }
+                
+            } catch (error) {
+                console.error('Upload error:', error);
+                showToast('Error uploading image.', 'error');
+                const uploadBtnErr = document.querySelector(`#${formType}-thumbnail`).parentElement.querySelector('button');
+                if (uploadBtnErr) {
+                    uploadBtnErr.innerHTML = '<i class="fas fa-upload"></i> Upload';
+                }
+            }
+        }
+        
+        // Initialize
+        // Initialize Quill editors
+        let editQuill, quickQuill;
+        
+        function initQuillEditors() {
+            if (document.querySelector('#edit-content')) {
+                editQuill = new Quill('#edit-content', {
+                    theme: 'snow',
+                    modules: {
+                        toolbar: [
+                            [{ 'header': [1, 2, 3, false] }],
+                            ['bold', 'italic', 'underline', 'strike'],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            ['blockquote', 'code-block'],
+                            ['link', 'image'],
+                            ['clean']
+                        ]
+                    }
+                });
+                const editEditor = document.querySelector('#edit-content .ql-editor');
+                if (editEditor) {
+                    editEditor.style.background = '#1a1a1a';
+                    editEditor.style.color = '#ffffff';
+                    
+                    // Add CSS to make all images responsive in editor
+                    const style = document.createElement('style');
+                    style.id = 'quill-responsive-images';
+                    style.textContent = `
+                        #edit-content .ql-editor img,
+                        #quick-content .ql-editor img {
+                            max-width: 100% !important;
+                            height: auto !important;
+                            display: block;
+                            margin: 10px auto;
+                        }
+                        .post-body img {
+                            max-width: 100% !important;
+                            height: auto !important;
+                        }
+                    `;
+                    if (!document.getElementById('quill-responsive-images')) {
+                        document.head.appendChild(style);
+                    }
+                }
+                
+                // Process images when content changes in edit editor
+                editQuill.on('text-change', function() {
+                    const imgs = document.querySelectorAll('#edit-content .ql-editor img');
+                    imgs.forEach(img => {
+                        img.style.maxWidth = '100%';
+                        img.style.height = 'auto';
+                        img.style.width = 'auto';
+                        img.removeAttribute('width');
+                        img.removeAttribute('height');
+                    });
+                });
+            }
+            
+            if (document.querySelector('#quick-content')) {
+                quickQuill = new Quill('#quick-content', {
+                    theme: 'snow',
+                    modules: {
+                        toolbar: [
+                            [{ 'header': [1, 2, 3, false] }],
+                            ['bold', 'italic', 'underline', 'strike'],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            ['blockquote', 'code-block'],
+                            ['link', 'image'],
+                            ['clean']
+                        ]
+                    }
+                });
+                const quickEditor = document.querySelector('#quick-content .ql-editor');
+                if (quickEditor) {
+                    quickEditor.style.background = '#1a1a1a';
+                    quickEditor.style.color = '#ffffff';
+                }
+                
+                // Process images when content changes in quick editor
+                quickQuill.on('text-change', function() {
+                    const imgs = document.querySelectorAll('#quick-content .ql-editor img');
+                    imgs.forEach(img => {
+                        img.style.maxWidth = '100%';
+                        img.style.height = 'auto';
+                        img.style.width = 'auto';
+                        img.removeAttribute('width');
+                        img.removeAttribute('height');
+                    });
+                });
+            }
+        }
+        
+        // Process images in saved content to ensure they're responsive
+        function processImagesForMobile(html) {
+            if (!html) return html;
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+            const imgs = tempDiv.querySelectorAll('img');
+            imgs.forEach(img => {
+                img.style.maxWidth = '100%';
+                img.style.height = 'auto';
+                img.removeAttribute('width');
+                img.removeAttribute('height');
+                if (!img.getAttribute('style')) {
+                    img.setAttribute('style', 'max-width: 100%; height: auto;');
+                }
+            });
+            return tempDiv.innerHTML;
+        }
+        
+        // Search filter for posts list (client-side)
+        document.addEventListener('input', function(e) {
+            if (e.target.id === 'posts-search') {
+                const q = (e.target.value || '').toLowerCase().trim();
+                const tbody = document.querySelector('#posts-list tbody');
+                if (!tbody) return;
+                const rows = tbody.querySelectorAll('tr[data-search]');
+                rows.forEach(tr => {
+                    const text = (tr.getAttribute('data-search') || '');
+                    tr.style.display = q === '' || text.indexOf(q) !== -1 ? '' : 'none';
+                });
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initQuillEditors();
+            if (checkAuth()) {
+                initNavigation();
+
+                // Reset Add New state when showing posts
+                const addNewBtn = document.getElementById('btn-add-new-post');
+                if (addNewBtn) {
+                    addNewBtn.addEventListener('click', function() {
+                        const form = document.getElementById('quick-create-form');
+                        if (form && !form.classList.contains('hidden')) {
+                            addNewBtn.innerHTML = '<i class="fas fa-plus"></i> Add New Post';
+                        }
+                    });
+                }
+
+                // Check for URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                const page = urlParams.get('page');
+                const editId = urlParams.get('edit');
+                if (page) {
+                    showPage(page);
+                    if (editId) {
+                        setTimeout(() => editPost(editId), 500);
+                    }
+                } else {
+                    loadDashboard();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

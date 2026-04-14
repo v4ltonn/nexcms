@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Security & Developer Tools | QR Generator, Sigma to KQL, SSL Checker, DNS Lookup | NexCMS</title>
+    <meta name="description" content="Free online security and developer tools: QR code generator, Sigma to KQL converter, SSL certificate checker, DNS lookup, IP lookup, hash generator, Base64, JSON formatter, regex tester, CVE search, and more.">
+    <meta name="keywords" content="security tools, QR code generator, Sigma to KQL, SSL checker, DNS lookup, IP lookup, hash generator, Base64 encoder, JSON formatter, regex tester, CVE search, password checker, email header analyzer, UUID generator, NexCMS tools">
+    <meta name="robots" content="index, follow, max-snippet:-1">
+    <link rel="canonical" href="${process.env.SITE_URL || 'http://localhost:3000'}/tools">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5a8f3b2c">
+    <link rel="apple-touch-icon" href="/favicon.svg?v=5a8f3b2c">
+    <meta name="theme-color" content="#0a0a0a">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Security & Developer Tools - NexCMS",
+      "description": "Free online security and developer tools: QR generator, Sigma to KQL converter, SSL checker, DNS lookup, and more.",
+      "url": "${process.env.SITE_URL || 'http://localhost:3000'}/tools",
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "name": "SSL Certificate Checker", "url": "${process.env.SITE_URL || 'http://localhost:3000'}/ssl-checker"},
+          {"@type": "ListItem", "position": 2, "name": "DNS Lookup", "url": "${process.env.SITE_URL || 'http://localhost:3000'}/dns-lookup"},
+          {"@type": "ListItem", "position": 3, "name": "IP Address Lookup", "url": "${process.env.SITE_URL || 'http://localhost:3000'}/ip-lookup"},
+          {"@type": "ListItem", "position": 4, "name": "Sigma to KQL Converter", "url": "${process.env.SITE_URL || 'http://localhost:3000'}/sigma-to-kql-converter"},
+          {"@type": "ListItem", "position": 5, "name": "QR Code Generator", "url": "${process.env.SITE_URL || 'http://localhost:3000'}/qr-generator"},
+          {"@type": "ListItem", "position": 6, "name": "Hash Generator", "url": "${process.env.SITE_URL || 'http://localhost:3000'}/hash-generator"},
+          {"@type": "ListItem", "position": 7, "name": "Base64 Encoder/Decoder", "url": "${process.env.SITE_URL || 'http://localhost:3000'}/base64-encoder"},
+          {"@type": "ListItem", "position": 8, "name": "JSON Formatter", "url": "${process.env.SITE_URL || 'http://localhost:3000'}/json-formatter"},
+          {"@type": "ListItem", "position": 9, "name": "UUID Generator", "url": "${process.env.SITE_URL || 'http://localhost:3000'}/uuid-generator"},
+          {"@type": "ListItem", "position": 10, "name": "Email Header Analyzer", "url": "${process.env.SITE_URL || 'http://localhost:3000'}/email-header-analyzer"},
+          {"@type": "ListItem", "position": 11, "name": "Text Diff", "url": "${process.env.SITE_URL || 'http://localhost:3000'}/text-diff"},
+          {"@type": "ListItem", "position": 12, "name": "Regex Tester", "url": "${process.env.SITE_URL || 'http://localhost:3000'}/regex-tester"},
+          {"@type": "ListItem", "position": 13, "name": "CVE Search", "url": "${process.env.SITE_URL || 'http://localhost:3000'}/cve-search"},
+          {"@type": "ListItem", "position": 14, "name": "Password Checker", "url": "${process.env.SITE_URL || 'http://localhost:3000'}/password-checker"},
+          {"@type": "ListItem", "position": 15, "name": "Security Headers Checker", "url": "${process.env.SITE_URL || 'http://localhost:3000'}/security-headers"},
+          {"@type": "ListItem", "position": 16, "name": "Image to PDF", "url": "${process.env.SITE_URL || 'http://localhost:3000'}/image-to-pdf"}
+        ]
+      }
+    }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #0a0a0a; color: #fff; line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .header {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            padding: 15px 0;
+            border-bottom: 2px solid #333;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .logo {
+            font-size: 1.4rem; font-weight: 800; color: #00ff88; text-decoration: none;
+            display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 10px;
+            background: rgba(0, 255, 136, 0.1); border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+        .logo:hover { background: rgba(0, 255, 136, 0.2); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0, 255, 136, 0.3); }
+        .logo i { font-size: 1.6rem; filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.5)); }
+        .nav-links { display: flex; list-style: none; gap: 2px; background: rgba(26, 26, 26, 0.9); padding: 4px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+        .nav-links a { color: #fff; text-decoration: none; font-weight: 600; font-size: 0.75rem; padding: 6px 10px; border-radius: 8px; transition: all 0.3s ease; }
+        .nav-links a:hover { background: rgba(255,255,255,0.1); }
+        .nav-links a[href="/tools"] { background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; }
+        .hero {
+            text-align: center;
+            padding: 50px 20px 40px;
+            background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+            border-bottom: 2px solid #333;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p { color: #aaa; font-size: 1.1rem; max-width: 640px; margin: 0 auto; }
+        .section { padding: 40px 0; }
+        .section-title { font-size: 1.5rem; font-weight: 700; color: #00ff88; margin-bottom: 24px; padding-bottom: 8px; border-bottom: 2px solid rgba(0,255,136,0.3); }
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .tool-card {
+            display: block;
+            background: #1a1a1a;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 24px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.25s ease;
+        }
+        .tool-card:hover {
+            border-color: rgba(0,255,136,0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,255,136,0.15);
+        }
+        .tool-card .icon { font-size: 2rem; color: #00ff88; margin-bottom: 12px; }
+        .tool-card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 8px; color: #fff; }
+        .tool-card p { font-size: 0.9rem; color: #aaa; line-height: 1.5; }
+        .footer-links { text-align: center; padding: 30px 20px; border-top: 1px solid #333; color: #666; font-size: 0.9rem; }
+        .footer-links a { color: #00ff88; text-decoration: none; }
+        .footer-links a:hover { text-decoration: underline; }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.9rem; }
+            .tools-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="/" class="logo"><i class="fas fa-shield-alt"></i><span>NexCMS</span></a>
+                <ul class="nav-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/category/tech">Tech</a></li>
+                    <li><a href="/category/cyber">Cyber</a></li>
+                    <li><a href="/category/crypto">Crypto</a></li>
+                    <li><a href="/category/gaming">Gaming</a></li>
+                    <li><a href="/tools">Tools</a></li>
+                    <li><a href="/cve-search">CVE Search</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Security & Developer Tools</h1>
+                <p>Free online tools for SSL checks, DNS lookup, Sigma to KQL conversion, QR codes, hashing, encoding, and more. No signup required.</p>
+            </div>
+        </section>
+
+        <div class="container">
+            <section class="section" id="security-network">
+                <h2 class="section-title">Security & Network</h2>
+                <div class="tools-grid">
+                    <a href="/ssl-checker" class="tool-card">
+                        <span class="icon"><i class="fas fa-lock"></i></span>
+                        <h3>SSL Certificate Checker</h3>
+                        <p>Verify SSL/TLS certificate validity, expiration, and issuer for any domain.</p>
+                    </a>
+                    <a href="/dns-lookup" class="tool-card">
+                        <span class="icon"><i class="fas fa-network-wired"></i></span>
+                        <h3>DNS Lookup</h3>
+                        <p>Look up A, AAAA, MX, TXT, CNAME, NS records for any domain.</p>
+                    </a>
+                    <a href="/ip-lookup" class="tool-card">
+                        <span class="icon"><i class="fas fa-map-marker-alt"></i></span>
+                        <h3>IP Address Lookup</h3>
+                        <p>Get geolocation, ISP, and network info for any IP address.</p>
+                    </a>
+                    <a href="/security-headers" class="tool-card">
+                        <span class="icon"><i class="fas fa-shield-alt"></i></span>
+                        <h3>Security Headers Checker</h3>
+                        <p>Analyze HTTP security headers (CSP, HSTS, X-Frame-Options) for a URL.</p>
+                    </a>
+                    <a href="/password-checker" class="tool-card">
+                        <span class="icon"><i class="fas fa-key"></i></span>
+                        <h3>Password Checker</h3>
+                        <p>Check if your password has been exposed in known data breaches.</p>
+                    </a>
+                    <a href="/cve-search" class="tool-card">
+                        <span class="icon"><i class="fas fa-bug"></i></span>
+                        <h3>CVE Search</h3>
+                        <p>Search the CVE database for vulnerabilities and security advisories.</p>
+                    </a>
+                </div>
+            </section>
+
+            <section class="section" id="siem-detection">
+                <h2 class="section-title">SIEM & Detection</h2>
+                <div class="tools-grid">
+                    <a href="/sigma-to-kql-converter" class="tool-card">
+                        <span class="icon"><i class="fas fa-exchange-alt"></i></span>
+                        <h3>Sigma to KQL Converter</h3>
+                        <p>Convert Sigma detection rules to Microsoft Defender KQL queries.</p>
+                    </a>
+                </div>
+            </section>
+
+            <section class="section" id="developer-encoding">
+                <h2 class="section-title">Developer & Encoding</h2>
+                <div class="tools-grid">
+                    <a href="/hash-generator" class="tool-card">
+                        <span class="icon"><i class="fas fa-hashtag"></i></span>
+                        <h3>Hash Generator</h3>
+                        <p>Generate MD5, SHA1, SHA256, SHA512 hashes from text.</p>
+                    </a>
+                    <a href="/base64-encoder" class="tool-card">
+                        <span class="icon"><i class="fas fa-code"></i></span>
+                        <h3>Base64 Encoder / Decoder</h3>
+                        <p>Encode and decode text to and from Base64.</p>
+                    </a>
+                    <a href="/json-formatter" class="tool-card">
+                        <span class="icon"><i class="fas fa-brackets-curly"></i></span>
+                        <h3>JSON Formatter</h3>
+                        <p>Format, validate, minify, and prettify JSON.</p>
+                    </a>
+                    <a href="/uuid-generator" class="tool-card">
+                        <span class="icon"><i class="fas fa-fingerprint"></i></span>
+                        <h3>UUID Generator</h3>
+                        <p>Generate random UUIDs (v4) for your applications.</p>
+                    </a>
+                    <a href="/regex-tester" class="tool-card">
+                        <span class="icon"><i class="fas fa-search-plus"></i></span>
+                        <h3>Regex Tester</h3>
+                        <p>Test and debug regular expressions with live matching.</p>
+                    </a>
+                    <a href="/text-diff" class="tool-card">
+                        <span class="icon"><i class="fas fa-file-code"></i></span>
+                        <h3>Text Diff</h3>
+                        <p>Compare two texts and see differences side-by-side.</p>
+                    </a>
+                </div>
+            </section>
+
+            <section class="section" id="utilities">
+                <h2 class="section-title">Utilities</h2>
+                <div class="tools-grid">
+                    <a href="/image-to-pdf" class="tool-card">
+                        <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                        <h3>Image to PDF</h3>
+                        <p>Convert JPG, PNG, WebP, GIF to a single PDF file.</p>
+                    </a>
+                    <a href="/qr-generator" class="tool-card">
+                        <span class="icon"><i class="fas fa-qrcode"></i></span>
+                        <h3>QR Code Generator</h3>
+                        <p>Create QR codes for URLs, text, email, and WiFi.</p>
+                    </a>
+                    <a href="/email-header-analyzer" class="tool-card">
+                        <span class="icon"><i class="fas fa-envelope-open-text"></i></span>
+                        <h3>Email Header Analyzer</h3>
+                        <p>Analyze email headers for security and authenticity (SPF, DKIM, DMARC).</p>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer-links">
+        <p><a href="/">Home</a> &middot; <a href="/category/tools">Tools articles</a> &middot; <a href="/contact">Contact</a> &middot; <a href="/privacy-policy">Privacy</a></p>
+    </footer>
+</body>
+</html>
