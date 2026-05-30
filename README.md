@@ -9,19 +9,27 @@ Built on Express + MongoDB. No paid plans, no vendor lock-in, no tracking.
 ## Screenshots
 
 ### Homepage
-![Homepage](docs/screenshots/homepage.png)
+<img width="2505" height="1522" alt="image" src="https://github.com/user-attachments/assets/ff570eb4-a082-4139-8eeb-b74f5ddef2e4" />
 
 ### Post page
-![Post](docs/screenshots/post.png)
+<img width="2505" height="1522" alt="image" src="https://github.com/user-attachments/assets/ae5e3bdf-d6b9-4115-9e9f-2a9ebffcc27a" />
 
 ### Category view
-![Categories](docs/screenshots/categories.png)
+<img width="2505" height="1522" alt="image" src="https://github.com/user-attachments/assets/ef739944-d563-41a1-aec2-bcdc5d85609a" />
 
 ### Security tools
-![Tools](docs/screenshots/tools.png)
+<img width="2505" height="1522" alt="image" src="https://github.com/user-attachments/assets/699628e1-a341-4620-801b-9d4c7ccaf859" />
+
+## CVE SEARCH 
+
+<img width="2505" height="1522" alt="image" src="https://github.com/user-attachments/assets/afd9c4b8-8f5b-4e5d-b1b6-012baa4d5c71" />
+
 
 ### Admin panel
-![Admin panel](docs/screenshots/admin-panel.png)
+
+<img width="2505" height="1522" alt="image" src="https://github.com/user-attachments/assets/fe5a83ca-588e-4176-a2c0-6023d5e70449" />
+
+<img width="2505" height="1522" alt="image" src="https://github.com/user-attachments/assets/030a4a02-4b82-4b38-b5fb-a747c9758fa7" />
 
 ---
 
