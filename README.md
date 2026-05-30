@@ -6,6 +6,25 @@ Built on Express + MongoDB. No paid plans, no vendor lock-in, no tracking.
 
 ---
 
+## Screenshots
+
+### Homepage
+![Homepage](docs/screenshots/homepage.png)
+
+### Post page
+![Post](docs/screenshots/post.png)
+
+### Category view
+![Categories](docs/screenshots/categories.png)
+
+### Security tools
+![Tools](docs/screenshots/tools.png)
+
+### Admin panel
+![Admin panel](docs/screenshots/admin-panel.png)
+
+---
+
 ## Features
 
 - **Rich post editor** with Quill WYSIWYG, code block support, and Markdown
